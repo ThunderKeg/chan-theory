@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3eee4" />
+    <meta
+      name="description"
+      content="《教你炒股票》阿娇版静态阅读站样章：更清晰的目录、术语、定理与批注排版。"
+    />
+    <title>教你炒股票 · 阿娇版</title>
+    <script>
+      (() => {
+        const theme = localStorage.getItem("chan-reader-theme") || "light";
+        const scale = localStorage.getItem("chan-reader-scale") || "100";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.setProperty("--reader-scale", `${scale}%`);
+      })();
+    </script>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#chapter-content">跳到正文</a>
+    <div class="reading-progress" aria-hidden="true">
+      <span id="reading-progress-bar"></span>
+    </div>
+
+    <header class="topbar">
+      <div class="topbar__brand">
+        <button
+          class="icon-button topbar__menu"
+          id="toc-toggle"
+          type="button"
+          aria-controls="book-sidebar"
+          aria-expanded="false"
+          aria-label="打开目录"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <a class="wordmark" href="./" aria-label="返回本书首页">
+          <span class="wordmark__seal">缠</span>
+          <span>
+            <strong>教你炒股票</strong>
+            <small>阿娇版 · 108 课</small>
+          </span>
+        </a>
+      </div>
+
+      <div class="topbar__chapter" id="topbar-chapter" aria-live="polite">
+        正在载入样章…
+      </div>
+
+      <div class="reader-tools" aria-label="阅读设置">
+        <div class="font-controls" aria-label="字号">
+          <button type="button" id="font-decrease" aria-label="减小字号">A−</button>
+          <button type="button" id="font-reset" aria-label="恢复默认字号">100%</button>
+          <button type="button" id="font-increase" aria-label="增大字号">A＋</button>
+        </div>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="切换深浅配色">
+          <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          </svg>
+          <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 15.4A8.5 8.5 0 0 1 8.6 4 8.5 8.5 0 1 0 20 15.4Z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="site-shell">
+      <aside class="book-sidebar" id="book-sidebar" aria-label="全书目录">
+        <div class="sidebar__intro">
+          <span class="sample-pill">样章预览</span>
+          <h1>缠论 108 课</h1>
+          <p>从 PDF 到可检索、可定位、适合长时间阅读的静态书站。</p>
+        </div>
+
+        <label class="toc-search" for="toc-search-input">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6" />
+            <path d="m16 16 4 4" />
+          </svg>
+          <input id="toc-search-input" type="search" placeholder="搜索课程标题" autocomplete="off" />
+        </label>
+
+        <div class="toc-meta">
+          <span>全书目录</span>
+          <span><i class="status-dot"></i> 当前开放 1 课</span>
+        </div>
+        <nav class="chapter-list" id="chapter-list" aria-label="课程列表"></nav>
+      </aside>
+      <button class="sidebar-scrim" id="sidebar-scrim" type="button" aria-label="关闭目录"></button>
+
+      <main class="reader-main">
+        <div id="chapter-error" class="chapter-error" role="alert" hidden></div>
+        <article class="chapter" id="chapter-content" tabindex="-1" aria-busy="true">
+          <div class="chapter-loading">
+            <span></span><span></span><span></span>
+            <p>正在整理书页…</p>
+          </div>
+        </article>
+        <nav class="chapter-pager" aria-label="章节翻页">
+          <button type="button" id="previous-chapter" disabled>
+            <span>上一课</span>
+            <strong>样章暂未开放</strong>
+          </button>
+          <div class="chapter-pager__mark" aria-hidden="true">18</div>
+          <button type="button" id="next-chapter" disabled>
+            <span>下一课</span>
+            <strong>完整制作后开放</strong>
+          </button>
+        </nav>
+        <footer class="site-footer">
+          <p>样章依据《教你炒股票--阿娇版》PDF 第 100-102 页整理。</p>
+          <p>仅合并断行、统一全半角与标点；原文、原书批注、编辑导读分别标示。</p>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <noscript>请启用 JavaScript 以载入章节数据和目录。</noscript>
+    <script type="module" src="assets/app.js"></script>
+  </body>
+</html>
