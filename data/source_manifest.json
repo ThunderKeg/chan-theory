@@ -1,0 +1,1567 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "filename": "教你炒股票--阿娇版.pdf",
+    "sha256": "9dbb3c1a2be7273cab59306578c30816fc9f6d2d6ae5b1dcb1aa12469db55c07",
+    "pageCount": 1262
+  },
+  "entryCount": 111,
+  "lessonCount": 108,
+  "appendixCount": 2,
+  "entries": [
+    {
+      "id": "000",
+      "number": 0,
+      "kind": "preface",
+      "title": "股市闲谈：G 股是 G 点，大牛不用套！",
+      "start": {
+        "page": 4,
+        "top": 79.6
+      },
+      "end": {
+        "page": 8,
+        "top": 156.1
+      }
+    },
+    {
+      "id": "001",
+      "number": 1,
+      "kind": "lesson",
+      "title": "不会赢钱的经济人，只是废人！",
+      "start": {
+        "page": 8,
+        "top": 156.1
+      },
+      "end": {
+        "page": 9,
+        "top": 492.8
+      }
+    },
+    {
+      "id": "002",
+      "number": 2,
+      "kind": "lesson",
+      "title": "没有庄家，有的只是赢家和输家！",
+      "start": {
+        "page": 9,
+        "top": 492.8
+      },
+      "end": {
+        "page": 10,
+        "top": 246.4
+      }
+    },
+    {
+      "id": "003",
+      "number": 3,
+      "kind": "lesson",
+      "title": "你的喜好，你的死亡陷阱！",
+      "start": {
+        "page": 10,
+        "top": 246.4
+      },
+      "end": {
+        "page": 10,
+        "top": 659.6
+      }
+    },
+    {
+      "id": "004",
+      "number": 4,
+      "kind": "lesson",
+      "title": "什么是理性？今早买 N 中工就是理性！",
+      "start": {
+        "page": 10,
+        "top": 659.6
+      },
+      "end": {
+        "page": 13,
+        "top": 140.5
+      }
+    },
+    {
+      "id": "005",
+      "number": 5,
+      "kind": "lesson",
+      "title": "市场无须分析，只要看和干！",
+      "start": {
+        "page": 13,
+        "top": 140.5
+      },
+      "end": {
+        "page": 13,
+        "top": 626.8
+      }
+    },
+    {
+      "id": "006",
+      "number": 6,
+      "kind": "lesson",
+      "title": "本 ID 如何在五粮液、包钢权证上提款的！",
+      "start": {
+        "page": 13,
+        "top": 626.8
+      },
+      "end": {
+        "page": 16,
+        "top": 680.0
+      }
+    },
+    {
+      "id": "007",
+      "number": 7,
+      "kind": "lesson",
+      "title": "给赚了指数亏了钱的一些忠告",
+      "start": {
+        "page": 16,
+        "top": 680.0
+      },
+      "end": {
+        "page": 20,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "008",
+      "number": 8,
+      "kind": "lesson",
+      "title": "投资如选面首，G 点为中心，拒绝 ED 男！",
+      "start": {
+        "page": 20,
+        "top": 79.6
+      },
+      "end": {
+        "page": 24,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "009",
+      "number": 9,
+      "kind": "lesson",
+      "title": "甄别“早泄”男的数学原则！",
+      "start": {
+        "page": 24,
+        "top": 79.6
+      },
+      "end": {
+        "page": 26,
+        "top": 614.5
+      }
+    },
+    {
+      "id": "010",
+      "number": 10,
+      "kind": "lesson",
+      "title": "2005 年 6 月，本 ID 为何时隔四年后重看股票",
+      "start": {
+        "page": 26,
+        "top": 614.5
+      },
+      "end": {
+        "page": 32,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "011",
+      "number": 11,
+      "kind": "lesson",
+      "title": "不会吻，无以高潮！",
+      "start": {
+        "page": 32,
+        "top": 79.6
+      },
+      "end": {
+        "page": 36,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "012",
+      "number": 12,
+      "kind": "lesson",
+      "title": "一吻何能消魂？",
+      "start": {
+        "page": 36,
+        "top": 79.6
+      },
+      "end": {
+        "page": 42,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "013",
+      "number": 13,
+      "kind": "lesson",
+      "title": "不带套的操作不是好操作！",
+      "start": {
+        "page": 42,
+        "top": 79.6
+      },
+      "end": {
+        "page": 47,
+        "top": 622.0
+      }
+    },
+    {
+      "id": "014",
+      "number": 14,
+      "kind": "lesson",
+      "title": "喝茅台的高潮程序！",
+      "start": {
+        "page": 47,
+        "top": 622.0
+      },
+      "end": {
+        "page": 56,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "015",
+      "number": 15,
+      "kind": "lesson",
+      "title": "没有趋势，没有背驰。",
+      "start": {
+        "page": 56,
+        "top": 79.6
+      },
+      "end": {
+        "page": 65,
+        "top": 441.2
+      }
+    },
+    {
+      "id": "016",
+      "number": 16,
+      "kind": "lesson",
+      "title": "中小资金的高效买卖法。",
+      "start": {
+        "page": 65,
+        "top": 441.2
+      },
+      "end": {
+        "page": 82,
+        "top": 246.4
+      }
+    },
+    {
+      "id": "017",
+      "number": 17,
+      "kind": "lesson",
+      "title": "走势终完美",
+      "start": {
+        "page": 82,
+        "top": 246.4
+      },
+      "end": {
+        "page": 100,
+        "top": 171.7
+      }
+    },
+    {
+      "id": "018",
+      "number": 18,
+      "kind": "lesson",
+      "title": "不被面首的雏男是不完美的。",
+      "start": {
+        "page": 100,
+        "top": 171.7
+      },
+      "end": {
+        "page": 103,
+        "top": 494.5
+      }
+    },
+    {
+      "id": "019",
+      "number": 19,
+      "kind": "lesson",
+      "title": "学习缠中说禅技术分析理论的关键",
+      "start": {
+        "page": 103,
+        "top": 494.5
+      },
+      "end": {
+        "page": 121,
+        "top": 702.1
+      }
+    },
+    {
+      "id": "020",
+      "number": 20,
+      "kind": "lesson",
+      "title": "缠中说禅走势中枢级别扩张及第三类买卖点",
+      "start": {
+        "page": 121,
+        "top": 702.1
+      },
+      "end": {
+        "page": 135,
+        "top": 327.7
+      }
+    },
+    {
+      "id": "021",
+      "number": 21,
+      "kind": "lesson",
+      "title": "缠中说禅买卖点分析的完备性",
+      "start": {
+        "page": 135,
+        "top": 327.7
+      },
+      "end": {
+        "page": 145,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "022",
+      "number": 22,
+      "kind": "lesson",
+      "title": "将 8 亿的大米装到 5 个庄家的肚里。",
+      "start": {
+        "page": 145,
+        "top": 79.6
+      },
+      "end": {
+        "page": 158,
+        "top": 717.7
+      }
+    },
+    {
+      "id": "023",
+      "number": 23,
+      "kind": "lesson",
+      "title": "市场与人生",
+      "start": {
+        "page": 158,
+        "top": 717.7
+      },
+      "end": {
+        "page": 177,
+        "top": 436.9
+      }
+    },
+    {
+      "id": "024",
+      "number": 24,
+      "kind": "lesson",
+      "title": "MACD 对背弛的辅助判断",
+      "start": {
+        "page": 177,
+        "top": 436.9
+      },
+      "end": {
+        "page": 194,
+        "top": 249.7
+      }
+    },
+    {
+      "id": "025",
+      "number": 25,
+      "kind": "lesson",
+      "title": "吻，MACD、背弛、中枢",
+      "start": {
+        "page": 194,
+        "top": 249.7
+      },
+      "end": {
+        "page": 219,
+        "top": 232.4
+      }
+    },
+    {
+      "id": "026",
+      "number": 26,
+      "kind": "lesson",
+      "title": "市场风险如何回避",
+      "start": {
+        "page": 219,
+        "top": 232.4
+      },
+      "end": {
+        "page": 231,
+        "top": 374.5
+      }
+    },
+    {
+      "id": "027",
+      "number": 27,
+      "kind": "lesson",
+      "title": "盘整背驰与历史性底部",
+      "start": {
+        "page": 231,
+        "top": 374.5
+      },
+      "end": {
+        "page": 245,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "028",
+      "number": 28,
+      "kind": "lesson",
+      "title": "下一目标摧毁基金",
+      "start": {
+        "page": 245,
+        "top": 79.6
+      },
+      "end": {
+        "page": 262,
+        "top": 156.1
+      }
+    },
+    {
+      "id": "029",
+      "number": 29,
+      "kind": "lesson",
+      "title": "转折的力度与级别",
+      "start": {
+        "page": 262,
+        "top": 156.1
+      },
+      "end": {
+        "page": 276,
+        "top": 343.3
+      }
+    },
+    {
+      "id": "030",
+      "number": 30,
+      "kind": "lesson",
+      "title": "缠中说禅理论的绝对性",
+      "start": {
+        "page": 276,
+        "top": 343.3
+      },
+      "end": {
+        "page": 283,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "031",
+      "number": 31,
+      "kind": "lesson",
+      "title": "资金管理的最稳固基础",
+      "start": {
+        "page": 283,
+        "top": 79.6
+      },
+      "end": {
+        "page": 301,
+        "top": 544.4
+      }
+    },
+    {
+      "id": "032",
+      "number": 32,
+      "kind": "lesson",
+      "title": "走势的当下与投资者的思维方式",
+      "start": {
+        "page": 301,
+        "top": 544.4
+      },
+      "end": {
+        "page": 312,
+        "top": 733.3
+      }
+    },
+    {
+      "id": "033",
+      "number": 33,
+      "kind": "lesson",
+      "title": "走势的多义性",
+      "start": {
+        "page": 312,
+        "top": 733.3
+      },
+      "end": {
+        "page": 326,
+        "top": 138.8
+      }
+    },
+    {
+      "id": "034",
+      "number": 34,
+      "kind": "lesson",
+      "title": "宁当面首，莫成怨男",
+      "start": {
+        "page": 326,
+        "top": 138.8
+      },
+      "end": {
+        "page": 336,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "035",
+      "number": 35,
+      "kind": "lesson",
+      "title": "给基础差的同学补补课",
+      "start": {
+        "page": 336,
+        "top": 79.6
+      },
+      "end": {
+        "page": 344,
+        "top": 268.0
+      }
+    },
+    {
+      "id": "036",
+      "number": 36,
+      "kind": "lesson",
+      "title": "走势类型连接结合性的简单运用",
+      "start": {
+        "page": 344,
+        "top": 268.0
+      },
+      "end": {
+        "page": 352,
+        "top": 514.9
+      }
+    },
+    {
+      "id": "037",
+      "number": 37,
+      "kind": "lesson",
+      "title": "背驰的再分辨",
+      "start": {
+        "page": 352,
+        "top": 514.9
+      },
+      "end": {
+        "page": 362,
+        "top": 670.9
+      }
+    },
+    {
+      "id": "038",
+      "number": 38,
+      "kind": "lesson",
+      "title": "走势类型连接的同级别分解",
+      "start": {
+        "page": 362,
+        "top": 670.9
+      },
+      "end": {
+        "page": 371,
+        "top": 577.3
+      }
+    },
+    {
+      "id": "039",
+      "number": 39,
+      "kind": "lesson",
+      "title": "同级别分解再研究",
+      "start": {
+        "page": 371,
+        "top": 577.3
+      },
+      "end": {
+        "page": 379,
+        "top": 187.3
+      }
+    },
+    {
+      "id": "040",
+      "number": 40,
+      "kind": "lesson",
+      "title": "同级别分解的多重赋格",
+      "start": {
+        "page": 379,
+        "top": 187.3
+      },
+      "end": {
+        "page": 388,
+        "top": 234.1
+      }
+    },
+    {
+      "id": "041",
+      "number": 41,
+      "kind": "lesson",
+      "title": "没有节奏，只有死",
+      "start": {
+        "page": 388,
+        "top": 234.1
+      },
+      "end": {
+        "page": 394,
+        "top": 327.7
+      }
+    },
+    {
+      "id": "042",
+      "number": 42,
+      "kind": "lesson",
+      "title": "有些人是不适合参与市场的",
+      "start": {
+        "page": 394,
+        "top": 327.7
+      },
+      "end": {
+        "page": 403,
+        "top": 124.9
+      }
+    },
+    {
+      "id": "043",
+      "number": 43,
+      "kind": "lesson",
+      "title": "有关背驰的补习课",
+      "start": {
+        "page": 403,
+        "top": 124.9
+      },
+      "end": {
+        "page": 410,
+        "top": 530.5
+      }
+    },
+    {
+      "id": "044",
+      "number": 44,
+      "kind": "lesson",
+      "title": "小级别背驰引发大级别转折",
+      "start": {
+        "page": 410,
+        "top": 530.5
+      },
+      "end": {
+        "page": 417,
+        "top": 202.9
+      }
+    },
+    {
+      "id": "045",
+      "number": 45,
+      "kind": "lesson",
+      "title": "持股与持币，两种最基本的操作。",
+      "start": {
+        "page": 417,
+        "top": 202.9
+      },
+      "end": {
+        "page": 427,
+        "top": 374.5
+      }
+    },
+    {
+      "id": "046",
+      "number": 46,
+      "kind": "lesson",
+      "title": "每日走势的分类",
+      "start": {
+        "page": 427,
+        "top": 374.5
+      },
+      "end": {
+        "page": 436,
+        "top": 670.9
+      }
+    },
+    {
+      "id": "047",
+      "number": 47,
+      "kind": "lesson",
+      "title": "一夜情行情分析",
+      "start": {
+        "page": 436,
+        "top": 670.9
+      },
+      "end": {
+        "page": 445,
+        "top": 592.9
+      }
+    },
+    {
+      "id": "048",
+      "number": 48,
+      "kind": "lesson",
+      "title": "暴跌，牛市行情的一夜情",
+      "start": {
+        "page": 445,
+        "top": 592.9
+      },
+      "end": {
+        "page": 451,
+        "top": 483.7
+      }
+    },
+    {
+      "id": "049",
+      "number": 49,
+      "kind": "lesson",
+      "title": "利润率最大的操作模式",
+      "start": {
+        "page": 451,
+        "top": 483.7
+      },
+      "end": {
+        "page": 459,
+        "top": 265.3
+      }
+    },
+    {
+      "id": "050",
+      "number": 50,
+      "kind": "lesson",
+      "title": "操作中的一些细节问题",
+      "start": {
+        "page": 459,
+        "top": 265.3
+      },
+      "end": {
+        "page": 467,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "051",
+      "number": 51,
+      "kind": "lesson",
+      "title": "短线股评荐股者的传销把戏",
+      "start": {
+        "page": 467,
+        "top": 79.6
+      },
+      "end": {
+        "page": 482,
+        "top": 686.5
+      }
+    },
+    {
+      "id": "052",
+      "number": 52,
+      "kind": "lesson",
+      "title": "炒股票就是真正的学佛",
+      "start": {
+        "page": 482,
+        "top": 686.5
+      },
+      "end": {
+        "page": 491,
+        "top": 561.7
+      }
+    },
+    {
+      "id": "053",
+      "number": 53,
+      "kind": "lesson",
+      "title": "三类买卖点的再分辨",
+      "start": {
+        "page": 491,
+        "top": 561.7
+      },
+      "end": {
+        "page": 497,
+        "top": 733.3
+      }
+    },
+    {
+      "id": "054",
+      "number": 54,
+      "kind": "lesson",
+      "title": "一个具体走势的分析",
+      "start": {
+        "page": 497,
+        "top": 733.3
+      },
+      "end": {
+        "page": 508,
+        "top": 421.3
+      }
+    },
+    {
+      "id": "055",
+      "number": 55,
+      "kind": "lesson",
+      "title": "买之前戏，卖之高潮",
+      "start": {
+        "page": 508,
+        "top": 421.3
+      },
+      "end": {
+        "page": 513,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "056",
+      "number": 56,
+      "kind": "lesson",
+      "title": "530 印花税当日行情图解",
+      "start": {
+        "page": 513,
+        "top": 79.6
+      },
+      "end": {
+        "page": 522,
+        "top": 187.3
+      }
+    },
+    {
+      "id": "057",
+      "number": 57,
+      "kind": "lesson",
+      "title": "当下图解分析再示范",
+      "start": {
+        "page": 522,
+        "top": 187.3
+      },
+      "end": {
+        "page": 529,
+        "top": 514.9
+      }
+    },
+    {
+      "id": "058",
+      "number": 58,
+      "kind": "lesson",
+      "title": "图解分析示范三",
+      "start": {
+        "page": 529,
+        "top": 514.9
+      },
+      "end": {
+        "page": 540,
+        "top": 717.7
+      }
+    },
+    {
+      "id": "059",
+      "number": 59,
+      "kind": "lesson",
+      "title": "图解分析示范四",
+      "start": {
+        "page": 540,
+        "top": 717.7
+      },
+      "end": {
+        "page": 548,
+        "top": 636.4
+      }
+    },
+    {
+      "id": "060",
+      "number": 60,
+      "kind": "lesson",
+      "title": "图解分析示范五",
+      "start": {
+        "page": 548,
+        "top": 636.4
+      },
+      "end": {
+        "page": 555,
+        "top": 202.9
+      }
+    },
+    {
+      "id": "061",
+      "number": 61,
+      "kind": "lesson",
+      "title": "区间套定位标准图解（分析示范六）",
+      "start": {
+        "page": 555,
+        "top": 202.9
+      },
+      "end": {
+        "page": 568,
+        "top": 733.3
+      }
+    },
+    {
+      "id": "062",
+      "number": 62,
+      "kind": "lesson",
+      "title": "分型、笔与线段",
+      "start": {
+        "page": 568,
+        "top": 733.3
+      },
+      "end": {
+        "page": 579,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "063",
+      "number": 63,
+      "kind": "lesson",
+      "title": "替各位理理基本概念",
+      "start": {
+        "page": 579,
+        "top": 79.6
+      },
+      "end": {
+        "page": 587,
+        "top": 739.4
+      }
+    },
+    {
+      "id": "064",
+      "number": 64,
+      "kind": "lesson",
+      "title": "去机场路上给各位补课",
+      "start": {
+        "page": 587,
+        "top": 739.4
+      },
+      "end": {
+        "page": 614,
+        "top": 390.1
+      }
+    },
+    {
+      "id": "065",
+      "number": 65,
+      "kind": "lesson",
+      "title": "再说说分型、笔、线段",
+      "start": {
+        "page": 614,
+        "top": 390.1
+      },
+      "end": {
+        "page": 634,
+        "top": 483.7
+      }
+    },
+    {
+      "id": "066",
+      "number": 66,
+      "kind": "lesson",
+      "title": "主力资金的食物链",
+      "start": {
+        "page": 634,
+        "top": 483.7
+      },
+      "end": {
+        "page": 643,
+        "top": 109.3
+      }
+    },
+    {
+      "id": "067",
+      "number": 67,
+      "kind": "lesson",
+      "title": "线段的划分标准",
+      "start": {
+        "page": 643,
+        "top": 109.3
+      },
+      "end": {
+        "page": 661,
+        "top": 436.9
+      }
+    },
+    {
+      "id": "068",
+      "number": 68,
+      "kind": "lesson",
+      "title": "走势预测的精确意义",
+      "start": {
+        "page": 661,
+        "top": 436.9
+      },
+      "end": {
+        "page": 673,
+        "top": 421.3
+      }
+    },
+    {
+      "id": "069",
+      "number": 69,
+      "kind": "lesson",
+      "title": "月线分段与上海大走势分析、预判",
+      "start": {
+        "page": 673,
+        "top": 421.3
+      },
+      "end": {
+        "page": 693,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "070",
+      "number": 70,
+      "kind": "lesson",
+      "title": "一个教科书式走势的示范分析",
+      "start": {
+        "page": 693,
+        "top": 79.6
+      },
+      "end": {
+        "page": 703,
+        "top": 312.1
+      }
+    },
+    {
+      "id": "071",
+      "number": 71,
+      "kind": "lesson",
+      "title": "线段划分标准的再分辨",
+      "start": {
+        "page": 703,
+        "top": 312.1
+      },
+      "end": {
+        "page": 715,
+        "top": 358.9
+      }
+    },
+    {
+      "id": "072",
+      "number": 72,
+      "kind": "lesson",
+      "title": "本 ID 已有课程的再梳理",
+      "start": {
+        "page": 715,
+        "top": 358.9
+      },
+      "end": {
+        "page": 727,
+        "top": 421.3
+      }
+    },
+    {
+      "id": "073",
+      "number": 73,
+      "kind": "lesson",
+      "title": "市场获利机会的绝对分类",
+      "start": {
+        "page": 727,
+        "top": 421.3
+      },
+      "end": {
+        "page": 736,
+        "top": 421.3
+      }
+    },
+    {
+      "id": "074",
+      "number": 74,
+      "kind": "lesson",
+      "title": "如何躲避政策性风险",
+      "start": {
+        "page": 736,
+        "top": 421.3
+      },
+      "end": {
+        "page": 743,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "075",
+      "number": 75,
+      "kind": "lesson",
+      "title": "逗庄家玩的一些杂史 1",
+      "start": {
+        "page": 743,
+        "top": 79.6
+      },
+      "end": {
+        "page": 755,
+        "top": 344.8
+      }
+    },
+    {
+      "id": "076",
+      "number": 76,
+      "kind": "lesson",
+      "title": "逗庄家玩的一些杂史 2",
+      "start": {
+        "page": 755,
+        "top": 344.8
+      },
+      "end": {
+        "page": 762,
+        "top": 717.7
+      }
+    },
+    {
+      "id": "077",
+      "number": 77,
+      "kind": "lesson",
+      "title": "一些概念的再分辨",
+      "start": {
+        "page": 762,
+        "top": 717.7
+      },
+      "end": {
+        "page": 771,
+        "top": 405.7
+      }
+    },
+    {
+      "id": "078",
+      "number": 78,
+      "kind": "lesson",
+      "title": "继续说线段的划分",
+      "start": {
+        "page": 771,
+        "top": 405.7
+      },
+      "end": {
+        "page": 784,
+        "top": 405.7
+      }
+    },
+    {
+      "id": "079",
+      "number": 79,
+      "kind": "lesson",
+      "title": "分型的辅助操作与一些问题的再解答",
+      "start": {
+        "page": 784,
+        "top": 405.7
+      },
+      "end": {
+        "page": 794,
+        "top": 499.3
+      }
+    },
+    {
+      "id": "080",
+      "number": 80,
+      "kind": "lesson",
+      "title": "市场没有同情、不信眼泪",
+      "start": {
+        "page": 794,
+        "top": 499.3
+      },
+      "end": {
+        "page": 815,
+        "top": 202.9
+      }
+    },
+    {
+      "id": "081",
+      "number": 81,
+      "kind": "lesson",
+      "title": "图例、更正及分型、走势类型的哲学本质",
+      "start": {
+        "page": 815,
+        "top": 202.9
+      },
+      "end": {
+        "page": 836,
+        "top": 499.3
+      }
+    },
+    {
+      "id": "082",
+      "number": 82,
+      "kind": "lesson",
+      "title": "分型结构的心理因素",
+      "start": {
+        "page": 836,
+        "top": 499.3
+      },
+      "end": {
+        "page": 847,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "083",
+      "number": 83,
+      "kind": "lesson",
+      "title": "笔-线段与线段-最小中枢结构的不同心理意义 1",
+      "start": {
+        "page": 847,
+        "top": 79.6
+      },
+      "end": {
+        "page": 854,
+        "top": 421.3
+      }
+    },
+    {
+      "id": "084",
+      "number": 84,
+      "kind": "lesson",
+      "title": "本 ID 理论一些必须注意的问题",
+      "start": {
+        "page": 854,
+        "top": 421.3
+      },
+      "end": {
+        "page": 881,
+        "top": 708.1
+      }
+    },
+    {
+      "id": "085",
+      "number": 85,
+      "kind": "lesson",
+      "title": "逗庄家玩的一些杂史 3",
+      "start": {
+        "page": 881,
+        "top": 708.1
+      },
+      "end": {
+        "page": 887,
+        "top": 436.9
+      }
+    },
+    {
+      "id": "086",
+      "number": 86,
+      "kind": "lesson",
+      "title": "走势分析中必须杜绝一根筋思维",
+      "start": {
+        "page": 887,
+        "top": 436.9
+      },
+      "end": {
+        "page": 902,
+        "top": 655.3
+      }
+    },
+    {
+      "id": "087",
+      "number": 87,
+      "kind": "lesson",
+      "title": "逗庄家玩的一些杂史 4",
+      "start": {
+        "page": 902,
+        "top": 655.3
+      },
+      "end": {
+        "page": 912,
+        "top": 686.5
+      }
+    },
+    {
+      "id": "088",
+      "number": 88,
+      "kind": "lesson",
+      "title": "图形生长的一个具体案例",
+      "start": {
+        "page": 912,
+        "top": 686.5
+      },
+      "end": {
+        "page": 930,
+        "top": 468.1
+      }
+    },
+    {
+      "id": "089",
+      "number": 89,
+      "kind": "lesson",
+      "title": "中阴阶段的具体分析",
+      "start": {
+        "page": 930,
+        "top": 468.1
+      },
+      "end": {
+        "page": 950,
+        "top": 374.5
+      }
+    },
+    {
+      "id": "090",
+      "number": 90,
+      "kind": "lesson",
+      "title": "中阴阶段结束时间的辅助判断",
+      "start": {
+        "page": 950,
+        "top": 374.5
+      },
+      "end": {
+        "page": 974,
+        "top": 530.5
+      }
+    },
+    {
+      "id": "091",
+      "number": 91,
+      "kind": "lesson",
+      "title": "走势结构的两重表里关系 1",
+      "start": {
+        "page": 974,
+        "top": 530.5
+      },
+      "end": {
+        "page": 995,
+        "top": 466.4
+      }
+    },
+    {
+      "id": "092",
+      "number": 92,
+      "kind": "lesson",
+      "title": "中枢震荡的监视器",
+      "start": {
+        "page": 995,
+        "top": 466.4
+      },
+      "end": {
+        "page": 1019,
+        "top": 468.1
+      }
+    },
+    {
+      "id": "093",
+      "number": 93,
+      "kind": "lesson",
+      "title": "走势结构的两重表里关系 2",
+      "start": {
+        "page": 1019,
+        "top": 468.1
+      },
+      "end": {
+        "page": 1033,
+        "top": 171.7
+      }
+    },
+    {
+      "id": "094",
+      "number": 94,
+      "kind": "lesson",
+      "title": "当机立断",
+      "start": {
+        "page": 1033,
+        "top": 171.7
+      },
+      "end": {
+        "page": 1037,
+        "top": 682.9
+      }
+    },
+    {
+      "id": "095",
+      "number": 95,
+      "kind": "lesson",
+      "title": "修炼自己",
+      "start": {
+        "page": 1037,
+        "top": 682.9
+      },
+      "end": {
+        "page": 1041,
+        "top": 292.9
+      }
+    },
+    {
+      "id": "096",
+      "number": 96,
+      "kind": "lesson",
+      "title": "无处不在的赌徒心理",
+      "start": {
+        "page": 1041,
+        "top": 292.9
+      },
+      "end": {
+        "page": 1052,
+        "top": 79.6
+      }
+    },
+    {
+      "id": "097",
+      "number": 97,
+      "kind": "lesson",
+      "title": "中医、兵法、诗歌、操作 1",
+      "start": {
+        "page": 1052,
+        "top": 79.6
+      },
+      "end": {
+        "page": 1066,
+        "top": 327.7
+      }
+    },
+    {
+      "id": "098",
+      "number": 98,
+      "kind": "lesson",
+      "title": "中医、兵法、诗歌、操作 2",
+      "start": {
+        "page": 1066,
+        "top": 327.7
+      },
+      "end": {
+        "page": 1078,
+        "top": 511.3
+      }
+    },
+    {
+      "id": "099",
+      "number": 99,
+      "kind": "lesson",
+      "title": "走势结构的两重表里关系 3",
+      "start": {
+        "page": 1078,
+        "top": 511.3
+      },
+      "end": {
+        "page": 1092,
+        "top": 733.3
+      }
+    },
+    {
+      "id": "100",
+      "number": 100,
+      "kind": "lesson",
+      "title": "中医、兵法、诗歌、操作 3",
+      "start": {
+        "page": 1092,
+        "top": 733.3
+      },
+      "end": {
+        "page": 1107,
+        "top": 670.9
+      }
+    },
+    {
+      "id": "101",
+      "number": 101,
+      "kind": "lesson",
+      "title": "答疑 1",
+      "start": {
+        "page": 1107,
+        "top": 670.9
+      },
+      "end": {
+        "page": 1113,
+        "top": 265.3
+      }
+    },
+    {
+      "id": "102",
+      "number": 102,
+      "kind": "lesson",
+      "title": "再说走势必完美",
+      "start": {
+        "page": 1113,
+        "top": 265.3
+      },
+      "end": {
+        "page": 1133,
+        "top": 733.3
+      }
+    },
+    {
+      "id": "103",
+      "number": 103,
+      "kind": "lesson",
+      "title": "学屠龙术前先学好防狼术",
+      "start": {
+        "page": 1133,
+        "top": 733.3
+      },
+      "end": {
+        "page": 1146,
+        "top": 546.1
+      }
+    },
+    {
+      "id": "104",
+      "number": 104,
+      "kind": "lesson",
+      "title": "几何结构与能量动力结构 1",
+      "start": {
+        "page": 1146,
+        "top": 546.1
+      },
+      "end": {
+        "page": 1168,
+        "top": 514.9
+      }
+    },
+    {
+      "id": "105",
+      "number": 105,
+      "kind": "lesson",
+      "title": "远离聪明、机械操作",
+      "start": {
+        "page": 1168,
+        "top": 514.9
+      },
+      "end": {
+        "page": 1202,
+        "top": 248.0
+      }
+    },
+    {
+      "id": "106",
+      "number": 106,
+      "kind": "lesson",
+      "title": "均线、轮动与缠中说禅板块强弱指标",
+      "start": {
+        "page": 1202,
+        "top": 248.0
+      },
+      "end": {
+        "page": 1217,
+        "top": 711.2
+      }
+    },
+    {
+      "id": "107",
+      "number": 107,
+      "kind": "lesson",
+      "title": "如何操作短线反弹",
+      "start": {
+        "page": 1217,
+        "top": 711.2
+      },
+      "end": {
+        "page": 1224,
+        "top": 603.7
+      }
+    },
+    {
+      "id": "108",
+      "number": 108,
+      "kind": "lesson",
+      "title": "何谓底部？从月线看中期走势演化",
+      "start": {
+        "page": 1224,
+        "top": 603.7
+      },
+      "end": {
+        "page": 1245,
+        "top": 165.4
+      }
+    },
+    {
+      "id": "901",
+      "number": 1,
+      "kind": "appendix",
+      "title": "缠师心法荟萃",
+      "start": {
+        "page": 1245,
+        "top": 165.4
+      },
+      "end": {
+        "page": 1256,
+        "top": 617.9
+      }
+    },
+    {
+      "id": "902",
+      "number": 2,
+      "kind": "appendix",
+      "title": "缠论经典",
+      "start": {
+        "page": 1256,
+        "top": 617.9
+      },
+      "end": {
+        "page": 1263,
+        "top": 65.0
+      }
+    }
+  ]
+}

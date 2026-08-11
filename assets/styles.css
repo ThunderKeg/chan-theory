@@ -762,6 +762,48 @@ input:focus-visible,
   text-align: left;
 }
 
+.source-heading {
+  margin: 3em 0 1.15em;
+  padding-left: 16px;
+  border-left: 3px solid var(--cinnabar);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.16em;
+  line-height: 1.6;
+}
+
+.source-divider {
+  width: 72px;
+  margin: 3em auto;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.book-figure {
+  margin: 2.6em 0;
+}
+
+.book-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.book-figure figcaption {
+  margin-top: 12px;
+  color: var(--ink-faint);
+  font-family: var(--sans);
+  font-size: 0.64em;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
 .section-outline {
   position: sticky;
   top: calc(var(--topbar-height) + 34px);

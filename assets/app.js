@@ -107,14 +107,28 @@ function renderToc(filter = "") {
     button.setAttribute("aria-current", state.chapter?.id === chapter.id ? "page" : "false");
 
     button.append(
-      el("span", "chapter-link__number", String(chapter.number).padStart(3, "0")),
+      el(
+        "span",
+        "chapter-link__number",
+        chapter.kind === "preface"
+          ? "序"
+          : chapter.kind === "appendix"
+            ? chapter.label
+            : String(chapter.number).padStart(3, "0")
+      ),
       el("span", "chapter-link__title", chapter.title),
       el("span", "chapter-link__state")
     );
 
     button.addEventListener("click", () => {
       if (!chapter.available) {
-        showToast(`第 ${chapter.number} 课将在样章确认后制作`);
+        const label =
+          chapter.kind === "preface"
+            ? "“股市闲谈”"
+            : chapter.kind === "appendix"
+              ? chapter.title
+              : `第 ${chapter.number} 课`;
+        showToast(`${label}正在逐章编辑与校对`);
         return;
       }
       setSidebar(false);
@@ -128,15 +142,13 @@ function renderToc(filter = "") {
 
 function renderHero(chapter) {
   const hero = el("header", "chapter-hero");
-  hero.append(el("div", "chapter-kicker", `样章 · 第 ${chapter.number} 课`));
+  hero.append(el("div", "chapter-kicker", chapter.kicker || `第 ${chapter.number} 课`));
   hero.append(el("h1", "", chapter.title));
 
   const meta = el("div", "chapter-meta");
-  meta.append(
-    el("span", "", `原文发布 ${chapter.date}`),
-    el("span", "", `PDF 第 ${chapter.sourcePages.join("-")} 页`),
-    el("span", "", `约 ${chapter.readingMinutes} 分钟`)
-  );
+  if (chapter.date) meta.append(el("span", "", `原文发布 ${chapter.date}`));
+  meta.append(el("span", "", `PDF 第 ${chapter.sourcePages.join("-")} 页`));
+  meta.append(el("span", "", `约 ${chapter.readingMinutes} 分钟`));
   hero.append(meta);
   return hero;
 }
@@ -168,6 +180,22 @@ function renderTheorem(block) {
   return theorem;
 }
 
+function renderSourceHeading(block) {
+  return el("h3", "source-heading", block.text);
+}
+
+function renderImage(block) {
+  const figure = el("figure", "book-figure");
+  const image = el("img", "");
+  image.src = block.src;
+  image.alt = block.alt || "原书图示";
+  image.loading = "lazy";
+  image.decoding = "async";
+  figure.append(image);
+  if (block.caption) figure.append(el("figcaption", "", block.caption));
+  return figure;
+}
+
 function renderBlock(block) {
   switch (block.type) {
     case "paragraph":
@@ -179,14 +207,21 @@ function renderBlock(block) {
       return renderDefinitions(block);
     case "theorem":
       return renderTheorem(block);
+    case "heading":
+      return renderSourceHeading(block);
+    case "image":
+      return renderImage(block);
+    case "divider":
+      return el("hr", "source-divider");
     default:
       return el("p", "", block.text || "");
   }
 }
 
 function renderChapter(chapter) {
-  document.title = `第 ${chapter.number} 课：${chapter.title} · 教你炒股票`;
-  elements.topbarChapter.textContent = `第 ${chapter.number} 课 · ${chapter.title}`;
+  const chapterLabel = chapter.kicker || `第 ${chapter.number} 课`;
+  document.title = `${chapterLabel}：${chapter.title} · 教你炒股票`;
+  elements.topbarChapter.textContent = `${chapterLabel} · ${chapter.title}`;
   elements.article.replaceChildren(renderHero(chapter));
 
   const layout = el("div", "reading-layout");

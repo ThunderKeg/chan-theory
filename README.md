@@ -1,6 +1,6 @@
 # 教你炒股票 · 阿娇版静态阅读站
 
-这是《教你炒股票--阿娇版》PDF 的静态网页阅读版。目前只开放第 18 课样章，用于确认排版、目录、配色和阅读功能；其余 107 课只展示目录，不含正文。
+这是《教你炒股票--阿娇版》PDF 的静态网页阅读版。目前只开放第 18 课样章，用于确认排版、目录、配色和阅读功能；其余 107 课、开篇“股市闲谈”及两篇附录只展示目录，不含正文。
 
 ## 本地预览
 
@@ -18,7 +18,9 @@ python -m http.server 8787 --bind 127.0.0.1
 - `assets/styles.css`：排版、主题、响应式与打印样式。
 - `assets/app.js`：目录、章节渲染、字号、主题、进度与续读功能。
 - `data/book.json`：全书 108 课目录元数据。
+- `data/source_manifest.json`：111 篇内容在 PDF 中的精确页内边界。
 - `data/chapters/*.json`：按章节拆分的结构化正文数据。
+- `docs/editing-progress.md`：逐章编辑、Agent Review、修订和最终状态台账。
 - `scripts/validate_site.py`：检查目录、样章引用和内容块结构。
 
 原始 PDF 只作为本地校对来源，已由 `.gitignore` 排除，不会上传到 GitHub Pages。
