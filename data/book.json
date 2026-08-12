@@ -100,7 +100,7 @@
     { "id": "091", "number": 91, "title": "走势结构的两重表里关系 1", "available": true },
     { "id": "092", "number": 92, "title": "中枢震荡的监视器", "available": true },
     { "id": "093", "number": 93, "title": "走势结构的两重表里关系 2", "available": true },
-    { "id": "094", "number": 94, "title": "当机立断", "available": false },
+    { "id": "094", "number": 94, "title": "当机立断", "available": true },
     { "id": "095", "number": 95, "title": "修炼自己", "available": false },
     { "id": "096", "number": 96, "title": "无处不在的赌徒心理", "available": false },
     { "id": "097", "number": 97, "title": "中医、兵法、诗歌、操作 1", "available": false },
