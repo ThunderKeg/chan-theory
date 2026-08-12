@@ -71,7 +71,7 @@
     { "id": "062", "number": 62, "title": "分型、笔与线段", "available": true },
     { "id": "063", "number": 63, "title": "替各位理理基本概念", "available": true },
     { "id": "064", "number": 64, "title": "去机场路上给各位补课", "available": true },
-    { "id": "065", "number": 65, "title": "再说说分型、笔、线段", "available": false },
+    { "id": "065", "number": 65, "title": "再说说分型、笔、线段", "available": true },
     { "id": "066", "number": 66, "title": "主力资金的食物链", "available": false },
     { "id": "067", "number": 67, "title": "线段的划分标准", "available": false },
     { "id": "068", "number": 68, "title": "走势预测的精确意义", "available": false },
