@@ -73,7 +73,7 @@
     { "id": "064", "number": 64, "title": "去机场路上给各位补课", "available": true },
     { "id": "065", "number": 65, "title": "再说说分型、笔、线段", "available": true },
     { "id": "066", "number": 66, "title": "主力资金的食物链", "available": true },
-    { "id": "067", "number": 67, "title": "线段的划分标准", "available": false },
+    { "id": "067", "number": 67, "title": "线段的划分标准", "available": true },
     { "id": "068", "number": 68, "title": "走势预测的精确意义", "available": false },
     { "id": "069", "number": 69, "title": "月线分段与上海大走势分析、预判", "available": false },
     { "id": "070", "number": 70, "title": "一个教科书式走势的示范分析", "available": false },
