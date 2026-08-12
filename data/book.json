@@ -81,7 +81,7 @@
     { "id": "072", "number": 72, "title": "本 ID 已有课程的再梳理", "available": true },
     { "id": "073", "number": 73, "title": "市场获利机会的绝对分类", "available": true },
     { "id": "074", "number": 74, "title": "如何躲避政策性风险", "available": true },
-    { "id": "075", "number": 75, "title": "逗庄家玩的一些杂史 1", "available": false },
+    { "id": "075", "number": 75, "title": "逗庄家玩的一些杂史 1", "available": true },
     { "id": "076", "number": 76, "title": "逗庄家玩的一些杂史 2", "available": false },
     { "id": "077", "number": 77, "title": "一些概念的再分辨", "available": false },
     { "id": "078", "number": 78, "title": "继续说线段的划分", "available": false },
