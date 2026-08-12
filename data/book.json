@@ -99,7 +99,7 @@
     { "id": "090", "number": 90, "title": "中阴阶段结束时间的辅助判断", "available": true },
     { "id": "091", "number": 91, "title": "走势结构的两重表里关系 1", "available": true },
     { "id": "092", "number": 92, "title": "中枢震荡的监视器", "available": false },
-    { "id": "093", "number": 93, "title": "走势结构的两重表里关系 2", "available": false },
+    { "id": "093", "number": 93, "title": "走势结构的两重表里关系 2", "available": true },
     { "id": "094", "number": 94, "title": "当机立断", "available": false },
     { "id": "095", "number": 95, "title": "修炼自己", "available": false },
     { "id": "096", "number": 96, "title": "无处不在的赌徒心理", "available": false },
