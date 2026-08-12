@@ -65,7 +65,7 @@
     { "id": "056", "number": 56, "title": "530 印花税当日行情图解", "available": true },
     { "id": "057", "number": 57, "title": "当下图解分析再示范", "available": true },
     { "id": "058", "number": 58, "title": "图解分析示范三", "available": true },
-    { "id": "059", "number": 59, "title": "图解分析示范四", "available": false },
+    { "id": "059", "number": 59, "title": "图解分析示范四", "available": true },
     { "id": "060", "number": 60, "title": "图解分析示范五", "available": false },
     { "id": "061", "number": 61, "title": "区间套定位标准图解（分析示范六）", "available": false },
     { "id": "062", "number": 62, "title": "分型、笔与线段", "available": false },
