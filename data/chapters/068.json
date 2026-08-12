@@ -422,7 +422,8 @@
               "page": 664,
               "top": 358.6
             }
-          }
+          },
+          "label": "原页信息"
         },
         {
           "type": "paragraph",
@@ -932,7 +933,8 @@
               "page": 670,
               "top": 427.2
             }
-          }
+          },
+          "label": "原页信息"
         },
         {
           "type": "paragraph",
