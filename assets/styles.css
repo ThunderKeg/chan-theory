@@ -999,6 +999,70 @@ input:focus-visible,
   opacity: 1;
 }
 
+.update-banner {
+  position: fixed;
+  z-index: 110;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  width: min(620px, calc(100vw - 40px));
+  padding: 15px 16px 15px 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 15px;
+  background: var(--surface-solid);
+  box-shadow: 0 20px 60px rgba(32, 39, 31, 0.2);
+}
+
+.update-banner[hidden] {
+  display: none;
+}
+
+.update-banner div {
+  min-width: 0;
+}
+
+.update-banner strong,
+.update-banner span {
+  display: block;
+}
+
+.update-banner strong {
+  color: var(--accent-deep);
+  font-family: var(--serif);
+  font-size: 15px;
+}
+
+.update-banner span {
+  margin-top: 3px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.update-banner button {
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.update-banner__primary {
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+}
+
+.update-banner__dismiss {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+}
+
 .image-viewer,
 .install-guide {
   width: auto;
@@ -1348,6 +1412,18 @@ input:focus-visible,
     min-width: 38px;
     padding: 0 8px;
   }
+
+  .update-banner {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: max(12px, env(safe-area-inset-left));
+    grid-template-columns: 1fr 1fr;
+    width: auto;
+  }
+
+  .update-banner div {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1373,7 +1449,8 @@ input:focus-visible,
 
   .install-button,
   .image-viewer,
-  .install-guide {
+  .install-guide,
+  .update-banner {
     display: none !important;
   }
 

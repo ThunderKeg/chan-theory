@@ -40,6 +40,9 @@ const elements = {
   toast: document.querySelector("#toast"),
   tocToggle: document.querySelector("#toc-toggle"),
   topbarChapter: document.querySelector("#topbar-chapter"),
+  updateBanner: document.querySelector("#update-banner"),
+  updateDismiss: document.querySelector("#update-dismiss"),
+  updateNow: document.querySelector("#update-now"),
 };
 
 const state = {
@@ -50,6 +53,7 @@ const state = {
   positionSaveFrame: null,
   scale: normalizeScale(Number(localStorage.getItem(STORAGE.scale)) || 100),
   toastTimer: null,
+  updateReloading: false,
   viewer: {
     dragOrigin: null,
     lastPinchDistance: 0,
@@ -394,11 +398,34 @@ async function installApp() {
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator) || window.location.protocol === "file:") return;
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register(new URL("service-worker.js", document.baseURI), { scope: "./" }).catch((error) => {
-      console.warn("Service Worker 注册失败", error);
-    });
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController && !state.updateReloading) showUpdateBanner();
   });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(new URL("service-worker.js", document.baseURI), { scope: "./" })
+      .then((registration) => {
+        if (registration.waiting && hadController) showUpdateBanner();
+        registration.addEventListener("updatefound", () => {
+          const worker = registration.installing;
+          worker?.addEventListener("statechange", () => {
+            if (worker.state === "activated" && hadController) showUpdateBanner();
+          });
+        });
+      })
+      .catch((error) => {
+        console.warn("Service Worker 注册失败", error);
+      });
+  });
+}
+
+function showUpdateBanner() {
+  elements.updateBanner.hidden = false;
+}
+
+function applyPreparedUpdate() {
+  state.updateReloading = true;
+  window.location.reload();
 }
 
 function cacheCurrentChapter() {
@@ -561,6 +588,10 @@ function bindEvents() {
   elements.fontReset.addEventListener("click", () => setScale(100));
   elements.themeToggle.addEventListener("click", toggleTheme);
   elements.installApp.addEventListener("click", installApp);
+  elements.updateNow.addEventListener("click", applyPreparedUpdate);
+  elements.updateDismiss.addEventListener("click", () => {
+    elements.updateBanner.hidden = true;
+  });
   elements.installGuideClose.addEventListener("click", () => elements.installGuide.close());
   elements.resumeReading.addEventListener("click", () => {
     if (elements.resumeReading.dataset.chapterId) navigateToChapter(elements.resumeReading.dataset.chapterId);

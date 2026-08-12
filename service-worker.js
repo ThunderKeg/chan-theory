@@ -1,12 +1,12 @@
-const CACHE_VERSION = "20260813-pwa-reader-v1";
+const CACHE_VERSION = "20260813-pwa-reader-v2";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260813-pwa-reader",
-  "./assets/app.js?v=20260813-pwa-reader",
+  "./assets/styles.css?v=20260813-update-prompt",
+  "./assets/app.js?v=20260813-update-prompt",
   "./data/book.json",
   "./manifest.webmanifest",
   "./assets/icons/icon-180.png",

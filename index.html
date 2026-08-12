@@ -22,7 +22,7 @@
     </script>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
-    <link rel="stylesheet" href="assets/styles.css?v=20260813-pwa-reader" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260813-update-prompt" />
   </head>
   <body>
     <a class="skip-link" href="#chapter-content">跳到正文</a>
@@ -136,6 +136,14 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="update-banner" id="update-banner" role="status" aria-live="polite" hidden>
+      <div>
+        <strong>发现新版本</strong>
+        <span>更新已准备好，刷新后生效，阅读进度不会丢失。</span>
+      </div>
+      <button class="update-banner__primary" id="update-now" type="button">立即更新</button>
+      <button class="update-banner__dismiss" id="update-dismiss" type="button" aria-label="暂时关闭更新提示">稍后</button>
+    </div>
 
     <dialog class="image-viewer" id="image-viewer" aria-labelledby="image-viewer-caption">
       <div class="image-viewer__panel">
@@ -167,6 +175,6 @@
       </div>
     </dialog>
     <noscript>请启用 JavaScript 以载入章节数据和目录。</noscript>
-    <script type="module" src="assets/app.js?v=20260813-pwa-reader"></script>
+    <script type="module" src="assets/app.js?v=20260813-update-prompt"></script>
   </body>
 </html>
