@@ -105,7 +105,7 @@
     { "id": "096", "number": 96, "title": "无处不在的赌徒心理", "available": true },
     { "id": "097", "number": 97, "title": "中医、兵法、诗歌、操作 1", "available": true },
     { "id": "098", "number": 98, "title": "中医、兵法、诗歌、操作 2", "available": true },
-    { "id": "099", "number": 99, "title": "走势结构的两重表里关系 3", "available": false },
+    { "id": "099", "number": 99, "title": "走势结构的两重表里关系 3", "available": true },
     { "id": "100", "number": 100, "title": "中医、兵法、诗歌、操作 3", "available": false },
     { "id": "101", "number": 101, "title": "答疑 1", "available": false },
     { "id": "102", "number": 102, "title": "再说走势必完美", "available": false },
