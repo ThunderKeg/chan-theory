@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f3eee4" />
     <meta
       name="description"
-      content="《教你炒股票》阿娇版静态阅读站样章：更清晰的目录、术语、定理与批注排版。"
+      content="《教你炒股票》阿娇版静态阅读站：更清晰的目录、术语、定理与批注排版。"
     />
     <title>教你炒股票 · 阿娇版</title>
     <script>
@@ -17,7 +17,7 @@
         document.documentElement.style.setProperty("--reader-scale", `${scale}%`);
       })();
     </script>
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260812-nav-fix" />
   </head>
   <body>
     <a class="skip-link" href="#chapter-content">跳到正文</a>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="topbar__chapter" id="topbar-chapter" aria-live="polite">
-        正在载入样章…
+        正在载入章节…
       </div>
 
       <div class="reader-tools" aria-label="阅读设置">
@@ -73,7 +73,7 @@
     <div class="site-shell">
       <aside class="book-sidebar" id="book-sidebar" aria-label="全书目录">
         <div class="sidebar__intro">
-          <span class="sample-pill">样章预览</span>
+          <span class="sample-pill">逐章校订中</span>
           <h1>缠论 108 课</h1>
           <p>从 PDF 到可检索、可定位、适合长时间阅读的静态书站。</p>
         </div>
@@ -88,7 +88,7 @@
 
         <div class="toc-meta">
           <span>全书目录</span>
-          <span><i class="status-dot"></i> 当前开放 1 课</span>
+          <span id="toc-available-count"><i class="status-dot"></i> 正在统计开放章节</span>
         </div>
         <nav class="chapter-list" id="chapter-list" aria-label="课程列表"></nav>
       </aside>
@@ -105,16 +105,16 @@
         <nav class="chapter-pager" aria-label="章节翻页">
           <button type="button" id="previous-chapter" disabled>
             <span>上一课</span>
-            <strong>样章暂未开放</strong>
+            <strong>正在载入</strong>
           </button>
-          <div class="chapter-pager__mark" aria-hidden="true">18</div>
+          <div class="chapter-pager__mark" id="chapter-pager-mark" aria-hidden="true">序</div>
           <button type="button" id="next-chapter" disabled>
             <span>下一课</span>
-            <strong>完整制作后开放</strong>
+            <strong>正在载入</strong>
           </button>
         </nav>
         <footer class="site-footer">
-          <p>样章依据《教你炒股票--阿娇版》PDF 第 100-102 页整理。</p>
+          <p>内容依据《教你炒股票--阿娇版》PDF 逐章整理与复核。</p>
           <p>仅合并断行、统一全半角与标点；原文、原书批注、编辑导读分别标示。</p>
         </footer>
       </main>
@@ -122,6 +122,6 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <noscript>请启用 JavaScript 以载入章节数据和目录。</noscript>
-    <script type="module" src="assets/app.js"></script>
+    <script type="module" src="assets/app.js?v=20260812-nav-fix"></script>
   </body>
 </html>

@@ -393,6 +393,7 @@ input:focus-visible,
   background: transparent;
   color: var(--ink-soft);
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
 }
 

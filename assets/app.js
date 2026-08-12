@@ -10,9 +10,13 @@ const elements = {
   article: document.querySelector("#chapter-content"),
   chapterError: document.querySelector("#chapter-error"),
   chapterList: document.querySelector("#chapter-list"),
+  availableCount: document.querySelector("#toc-available-count"),
   fontDecrease: document.querySelector("#font-decrease"),
   fontIncrease: document.querySelector("#font-increase"),
   fontReset: document.querySelector("#font-reset"),
+  nextChapter: document.querySelector("#next-chapter"),
+  pagerMark: document.querySelector("#chapter-pager-mark"),
+  previousChapter: document.querySelector("#previous-chapter"),
   progress: document.querySelector("#reading-progress-bar"),
   search: document.querySelector("#toc-search-input"),
   sidebarScrim: document.querySelector("#sidebar-scrim"),
@@ -75,7 +79,14 @@ function setSidebar(open) {
 
 function chapterIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("chapter") || "018";
+  return params.get("chapter");
+}
+
+function navigateToChapter(chapterId) {
+  const url = new URL(window.location.href);
+  url.search = `?chapter=${encodeURIComponent(chapterId)}`;
+  url.hash = "";
+  window.location.assign(url);
 }
 
 async function fetchJson(path) {
@@ -99,14 +110,18 @@ function renderToc(filter = "") {
 
   const fragment = document.createDocumentFragment();
   chapters.forEach((chapter) => {
-    const button = el("button", "chapter-link");
-    button.type = "button";
-    button.dataset.chapterId = chapter.id;
-    button.classList.toggle("is-available", chapter.available);
-    button.classList.toggle("is-current", state.chapter?.id === chapter.id);
-    button.setAttribute("aria-current", state.chapter?.id === chapter.id ? "page" : "false");
+    const link = el(chapter.available ? "a" : "button", "chapter-link");
+    if (chapter.available) {
+      link.href = `?chapter=${encodeURIComponent(chapter.id)}`;
+    } else {
+      link.type = "button";
+    }
+    link.dataset.chapterId = chapter.id;
+    link.classList.toggle("is-available", chapter.available);
+    link.classList.toggle("is-current", state.chapter?.id === chapter.id);
+    link.setAttribute("aria-current", state.chapter?.id === chapter.id ? "page" : "false");
 
-    button.append(
+    link.append(
       el(
         "span",
         "chapter-link__number",
@@ -120,7 +135,7 @@ function renderToc(filter = "") {
       el("span", "chapter-link__state")
     );
 
-    button.addEventListener("click", () => {
+    link.addEventListener("click", () => {
       if (!chapter.available) {
         const label =
           chapter.kind === "preface"
@@ -132,10 +147,8 @@ function renderToc(filter = "") {
         return;
       }
       setSidebar(false);
-      elements.article.focus({ preventScroll: true });
-      window.scrollTo({ top: 0, behavior: "smooth" });
     });
-    fragment.append(button);
+    fragment.append(link);
   });
   elements.chapterList.append(fragment);
 }
@@ -251,6 +264,24 @@ function renderChapter(chapter) {
   observeSections();
 }
 
+function updatePager() {
+  const available = state.book.chapters.filter((chapter) => chapter.available);
+  const currentIndex = available.findIndex((chapter) => chapter.id === state.chapter.id);
+  const previous = currentIndex > 0 ? available[currentIndex - 1] : null;
+  const next = currentIndex >= 0 && currentIndex < available.length - 1 ? available[currentIndex + 1] : null;
+
+  elements.previousChapter.disabled = !previous;
+  elements.previousChapter.dataset.chapterId = previous?.id || "";
+  elements.previousChapter.querySelector("strong").textContent = previous?.title || "已经是开篇";
+
+  elements.nextChapter.disabled = !next;
+  elements.nextChapter.dataset.chapterId = next?.id || "";
+  elements.nextChapter.querySelector("strong").textContent = next?.title || "后续章节校订中";
+
+  elements.pagerMark.textContent =
+    state.chapter.kind === "preface" ? "序" : String(state.chapter.number).padStart(2, "0");
+}
+
 function observeSections() {
   if (!("IntersectionObserver" in window)) return;
   const links = new Map(
@@ -300,6 +331,11 @@ function bindEvents() {
   elements.fontIncrease.addEventListener("click", () => shiftScale(1));
   elements.fontReset.addEventListener("click", () => setScale(100));
   elements.themeToggle.addEventListener("click", toggleTheme);
+  [elements.previousChapter, elements.nextChapter].forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.chapterId) navigateToChapter(button.dataset.chapterId);
+    });
+  });
   elements.tocToggle.addEventListener("click", () => {
     setSidebar(!document.body.classList.contains("is-sidebar-open"));
   });
@@ -320,18 +356,22 @@ async function init() {
     const requestedId = chapterIdFromUrl();
     const metadata = state.book.chapters.find((chapter) => chapter.id === requestedId);
     const target = metadata?.available ? metadata : state.book.chapters.find((chapter) => chapter.available);
-    if (!target) throw new Error("没有可阅读的样章数据");
-    if (metadata && !metadata.available) showToast(`第 ${metadata.number} 课尚未制作，先为你打开样章`);
+    if (!target) throw new Error("没有可阅读的章节数据");
+    if (metadata && !metadata.available) showToast(`第 ${metadata.number} 课尚未制作，先为你打开已校订章节`);
+
+    const availableTotal = state.book.chapters.filter((chapter) => chapter.available).length;
+    elements.availableCount.textContent = `当前开放 ${availableTotal} 篇`;
 
     state.chapter = await fetchJson(`data/chapters/${target.id}.json`);
     renderToc();
     renderChapter(state.chapter);
+    updatePager();
     window.setTimeout(restoreReadingPosition, 160);
     updateReadingProgress();
   } catch (error) {
     elements.article.hidden = true;
     elements.chapterError.hidden = false;
-    elements.chapterError.textContent = `样章载入失败。请通过本地 HTTP 服务打开网站，不要直接双击 HTML 文件。${error.message}`;
+    elements.chapterError.textContent = `章节载入失败。请通过本地 HTTP 服务打开网站，不要直接双击 HTML 文件。${error.message}`;
     console.error(error);
   }
 }
