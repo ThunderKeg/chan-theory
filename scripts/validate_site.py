@@ -41,6 +41,44 @@ def validate_block(block: dict, location: str):
         assert block.get("title"), f"{location}: theorem title is required"
 
 
+def validate_audio_manifest(chapters: list[dict]):
+    audio_path = ROOT / "data" / "audio.json"
+    if not audio_path.is_file():
+        return 0
+
+    audio = load_json(audio_path)
+    assert audio.get("schemaVersion") == 1, "audio manifest: unsupported schema version"
+    items = audio.get("items")
+    assert isinstance(items, dict), "audio manifest: items must be an object"
+
+    chapter_ids = {chapter["id"] for chapter in chapters}
+    for chapter_id, item in items.items():
+        assert chapter_id in chapter_ids, f"audio manifest: unknown chapter id {chapter_id}"
+        src = item.get("src")
+        assert isinstance(src, str) and src.startswith("assets/audio/"), (
+            f"audio manifest {chapter_id}: src must point to assets/audio"
+        )
+        audio_file = ROOT / src
+        assert audio_file.is_file(), f"audio manifest {chapter_id}: missing {src}"
+        assert audio_file.suffix.lower() in {".mp3", ".m4a"}, (
+            f"audio manifest {chapter_id}: unsupported audio format"
+        )
+        if audio_file.suffix.lower() == ".m4a":
+            assert item.get("mimeType") == "audio/mp4", (
+                f"audio manifest {chapter_id}: m4a files must use audio/mp4"
+            )
+        assert item.get("bytes") == audio_file.stat().st_size, (
+            f"audio manifest {chapter_id}: byte size drift"
+        )
+        duration = item.get("durationSeconds")
+        assert isinstance(duration, (int, float)) and duration > 0, (
+            f"audio manifest {chapter_id}: durationSeconds must be positive"
+        )
+        assert item.get("label"), f"audio manifest {chapter_id}: label is required"
+
+    return len(items)
+
+
 def main():
     book = load_json(ROOT / "data" / "book.json")
     manifest = load_json(ROOT / "data" / "source_manifest.json")
@@ -107,9 +145,10 @@ def main():
             for block_index, block in enumerate(section["blocks"]):
                 validate_block(block, f"{metadata['id']}.sections[{section_index}].blocks[{block_index}]")
 
+    audio_count = validate_audio_manifest(chapters)
     print(
         f"OK: {len(chapters)} TOC entries (108 lessons + preface + 2 appendices), "
-        f"{len(available)} available chapter, structured content valid"
+        f"{len(available)} available chapter, {audio_count} audio item, structured content valid"
     )
 
 

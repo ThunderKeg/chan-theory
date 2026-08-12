@@ -27,6 +27,7 @@ const elements = {
 };
 
 const state = {
+  audio: null,
   book: null,
   chapter: null,
   scale: normalizeScale(Number(localStorage.getItem(STORAGE.scale)) || 100),
@@ -95,6 +96,25 @@ async function fetchJson(path) {
   return response.json();
 }
 
+async function fetchOptionalJson(path) {
+  try {
+    return await fetchJson(path);
+  } catch {
+    return null;
+  }
+}
+
+function audioForChapter(chapterId) {
+  return state.audio?.items?.[chapterId] || null;
+}
+
+function formatDuration(seconds) {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "";
+  const minutes = Math.floor(seconds / 60);
+  const rest = Math.round(seconds % 60);
+  return `${minutes}:${String(rest).padStart(2, "0")}`;
+}
+
 function renderToc(filter = "") {
   const query = filter.trim().toLocaleLowerCase("zh-CN");
   const chapters = state.book.chapters.filter((chapter) => {
@@ -110,6 +130,7 @@ function renderToc(filter = "") {
 
   const fragment = document.createDocumentFragment();
   chapters.forEach((chapter) => {
+    const audio = audioForChapter(chapter.id);
     const link = el(chapter.available ? "a" : "button", "chapter-link");
     if (chapter.available) {
       link.href = `?chapter=${encodeURIComponent(chapter.id)}`;
@@ -119,6 +140,7 @@ function renderToc(filter = "") {
     link.dataset.chapterId = chapter.id;
     link.classList.toggle("is-available", chapter.available);
     link.classList.toggle("is-current", state.chapter?.id === chapter.id);
+    link.classList.toggle("has-audio", Boolean(audio));
     link.setAttribute("aria-current", state.chapter?.id === chapter.id ? "page" : "false");
 
     link.append(
@@ -132,6 +154,7 @@ function renderToc(filter = "") {
             : String(chapter.number).padStart(3, "0")
       ),
       el("span", "chapter-link__title", chapter.title),
+      el("span", "chapter-link__audio", audio ? "音频" : ""),
       el("span", "chapter-link__state")
     );
 
@@ -163,7 +186,39 @@ function renderHero(chapter) {
   meta.append(el("span", "", `PDF 第 ${chapter.sourcePages.join("-")} 页`));
   meta.append(el("span", "", `约 ${chapter.readingMinutes} 分钟`));
   hero.append(meta);
+
+  const audio = renderAudioPlayer(chapter);
+  if (audio) hero.append(audio);
   return hero;
+}
+
+function renderAudioPlayer(chapter) {
+  const audioInfo = audioForChapter(chapter.id);
+  if (!audioInfo) return null;
+
+  const panel = el("section", "chapter-audio");
+  panel.setAttribute("aria-label", "本课音频");
+
+  const copy = el("div", "chapter-audio__copy");
+  copy.append(el("span", "chapter-audio__eyebrow", "本课音频"));
+  copy.append(el("strong", "", audioInfo.label || "正文朗读"));
+  const details = [formatDuration(audioInfo.durationSeconds), "不含回复与发布时间"].filter(Boolean).join(" · ");
+  copy.append(el("span", "chapter-audio__details", details));
+
+  const player = document.createElement("audio");
+  player.controls = true;
+  player.preload = "metadata";
+  const source = document.createElement("source");
+  source.src = audioInfo.src;
+  if (audioInfo.mimeType) source.type = audioInfo.mimeType;
+  player.append(source);
+
+  const download = el("a", "chapter-audio__download", "下载");
+  download.href = audioInfo.src;
+  download.download = "";
+
+  panel.append(copy, player, download);
+  return panel;
 }
 
 function renderNote(block) {
@@ -352,7 +407,9 @@ async function init() {
   bindEvents();
   setScale(state.scale, false);
   try {
-    state.book = await fetchJson("data/book.json");
+    const [book, audio] = await Promise.all([fetchJson("data/book.json"), fetchOptionalJson("data/audio.json")]);
+    state.book = book;
+    state.audio = audio;
     const requestedId = chapterIdFromUrl();
     const metadata = state.book.chapters.find((chapter) => chapter.id === requestedId);
     const target = metadata?.available ? metadata : state.book.chapters.find((chapter) => chapter.available);
@@ -360,7 +417,10 @@ async function init() {
     if (metadata && !metadata.available) showToast(`第 ${metadata.number} 课尚未制作，先为你打开已校订章节`);
 
     const availableTotal = state.book.chapters.filter((chapter) => chapter.available).length;
-    elements.availableCount.textContent = `当前开放 ${availableTotal} 篇`;
+    const audioTotal = Object.keys(state.audio?.items || {}).length;
+    elements.availableCount.textContent = audioTotal
+      ? `当前开放 ${availableTotal} 篇 · 音频 ${audioTotal} 课`
+      : `当前开放 ${availableTotal} 篇`;
 
     state.chapter = await fetchJson(`data/chapters/${target.id}.json`);
     renderToc();
