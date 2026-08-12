@@ -97,7 +97,7 @@
     { "id": "088", "number": 88, "title": "图形生长的一个具体案例", "available": true },
     { "id": "089", "number": 89, "title": "中阴阶段的具体分析", "available": true },
     { "id": "090", "number": 90, "title": "中阴阶段结束时间的辅助判断", "available": true },
-    { "id": "091", "number": 91, "title": "走势结构的两重表里关系 1", "available": false },
+    { "id": "091", "number": 91, "title": "走势结构的两重表里关系 1", "available": true },
     { "id": "092", "number": 92, "title": "中枢震荡的监视器", "available": false },
     { "id": "093", "number": 93, "title": "走势结构的两重表里关系 2", "available": false },
     { "id": "094", "number": 94, "title": "当机立断", "available": false },
