@@ -30,7 +30,11 @@ jobs:
           python-version: "3.12"
 
       - name: Validate content data
-        run: python scripts/validate_site.py
+        run: |
+          python scripts/validate_site.py
+          node --check assets/app.js
+          node --check service-worker.js
+          node scripts/test_reader_pwa.mjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

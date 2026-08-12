@@ -53,6 +53,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  min-height: 100dvh;
   background:
     radial-gradient(circle at 82% 4%, rgba(169, 79, 55, 0.06), transparent 25rem),
     var(--paper);
@@ -123,7 +124,8 @@ input:focus-visible,
   grid-template-columns: var(--sidebar-width) 1fr auto;
   align-items: center;
   width: 100%;
-  min-height: var(--topbar-height);
+  min-height: calc(var(--topbar-height) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
   border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(18px) saturate(135%);
@@ -195,7 +197,35 @@ input:focus-visible,
 
 .reader-tools {
   gap: 10px;
-  padding: 0 22px;
+  padding: 0 max(22px, env(safe-area-inset-right)) 0 22px;
+}
+
+.install-button {
+  display: inline-flex;
+  height: 38px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.install-button[hidden] {
+  display: none;
+}
+
+.install-button svg {
+  width: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .font-controls {
@@ -267,13 +297,13 @@ input:focus-visible,
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   min-height: 100vh;
-  padding-top: var(--topbar-height);
+  padding-top: calc(var(--topbar-height) + env(safe-area-inset-top));
 }
 
 .book-sidebar {
   position: fixed;
   z-index: 50;
-  top: var(--topbar-height);
+  top: calc(var(--topbar-height) + env(safe-area-inset-top));
   bottom: 0;
   left: 0;
   width: var(--sidebar-width);
@@ -312,6 +342,40 @@ input:focus-visible,
   color: var(--ink-soft);
   font-size: 12px;
   line-height: 1.8;
+}
+
+.resume-reading {
+  display: grid;
+  width: 100%;
+  gap: 4px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.resume-reading[hidden] {
+  display: none;
+}
+
+.resume-reading span {
+  color: var(--accent-deep);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+.resume-reading strong {
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .toc-search {
@@ -794,6 +858,7 @@ input:focus-visible,
   border-radius: 10px;
   background: #fff;
   box-shadow: var(--shadow);
+  cursor: zoom-in;
 }
 
 .book-figure figcaption {
@@ -934,6 +999,167 @@ input:focus-visible,
   opacity: 1;
 }
 
+.image-viewer,
+.install-guide {
+  width: auto;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.image-viewer[open] {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+}
+
+.image-viewer::backdrop,
+.install-guide::backdrop {
+  background: rgba(7, 10, 8, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.image-viewer__panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: 100%;
+  height: 100%;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  color: #f5f3ec;
+}
+
+.image-viewer__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 6px 4px 12px;
+}
+
+.image-viewer__toolbar p {
+  overflow: hidden;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-family: var(--serif);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-viewer__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.image-viewer__actions button,
+.image-viewer__actions output {
+  min-width: 40px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: 600 12px var(--sans);
+}
+
+.image-viewer__actions button {
+  cursor: pointer;
+}
+
+.image-viewer__actions output {
+  display: grid;
+  place-items: center;
+}
+
+.image-viewer__stage {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: zoom-in;
+  touch-action: none;
+  user-select: none;
+}
+
+.image-viewer__stage.is-zoomed {
+  cursor: grab;
+}
+
+.image-viewer__stage.is-zoomed:active {
+  cursor: grabbing;
+}
+
+.image-viewer__stage img {
+  display: block;
+  max-width: min(96%, 1500px);
+  max-height: 94%;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 80ms ease-out;
+  will-change: transform;
+  -webkit-user-drag: none;
+}
+
+.image-viewer__hint {
+  margin: 9px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 11px;
+  text-align: center;
+}
+
+.install-guide[open] {
+  position: fixed;
+  inset: auto max(16px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.install-guide__card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  width: min(520px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface-solid);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+.install-guide__card h2 {
+  margin: 0 0 7px;
+  font-family: var(--serif);
+  font-size: 20px;
+}
+
+.install-guide__card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.install-guide__card button {
+  grid-column: 1 / -1;
+  height: 42px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
 @media (max-width: 1080px) {
   :root {
     --sidebar-width: 292px;
@@ -988,7 +1214,17 @@ input:focus-visible,
   }
 
   .reader-tools {
-    padding-right: 14px;
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  .install-button {
+    width: 38px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .install-button span {
+    display: none;
   }
 
   .site-shell {
@@ -1031,7 +1267,7 @@ input:focus-visible,
   }
 
   .reader-main {
-    padding: 48px 22px 36px;
+    padding: 48px max(22px, env(safe-area-inset-right)) max(36px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
   }
 
   .chapter-hero {
@@ -1094,6 +1330,24 @@ input:focus-visible,
   .chapter-pager strong {
     font-size: 12px;
   }
+
+  .image-viewer__toolbar {
+    display: grid;
+  }
+
+  .image-viewer__toolbar p {
+    min-height: 18px;
+  }
+
+  .image-viewer__actions {
+    justify-content: center;
+  }
+
+  .image-viewer__actions button,
+  .image-viewer__actions output {
+    min-width: 38px;
+    padding: 0 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1114,6 +1368,12 @@ input:focus-visible,
   .site-footer,
   .reading-progress,
   .section-outline {
+    display: none !important;
+  }
+
+  .install-button,
+  .image-viewer,
+  .install-guide {
     display: none !important;
   }
 

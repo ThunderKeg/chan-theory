@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 
@@ -99,6 +100,10 @@ def main():
             assert source["imageCount"] == audit["imageCount"]
         for index, block in enumerate(chapter["intro"]):
             validate_block(block, f"{metadata['id']}.intro[{index}]")
+            if block.get("type") == "image":
+                assert block["src"].startswith(f"assets/book-images/{metadata['id']}/"), (
+                    f"{metadata['id']}.intro[{index}]: image must stay inside its chapter cache boundary"
+                )
         section_ids = set()
         for section_index, section in enumerate(chapter["sections"]):
             assert section.get("id") and section.get("title") and section.get("blocks")
@@ -106,10 +111,52 @@ def main():
             section_ids.add(section["id"])
             for block_index, block in enumerate(section["blocks"]):
                 validate_block(block, f"{metadata['id']}.sections[{section_index}].blocks[{block_index}]")
+                if block.get("type") == "image":
+                    assert block["src"].startswith(f"assets/book-images/{metadata['id']}/"), (
+                        f"{metadata['id']}.sections[{section_index}].blocks[{block_index}]: "
+                        "image must stay inside its chapter cache boundary"
+                    )
+
+    manifest_path = ROOT / "manifest.webmanifest"
+    service_worker_path = ROOT / "service-worker.js"
+    app_path = ROOT / "assets" / "app.js"
+    styles_path = ROOT / "assets" / "styles.css"
+    index_path = ROOT / "index.html"
+    pwa_manifest = load_json(manifest_path)
+    assert pwa_manifest["start_url"] == "./?resume=1"
+    assert pwa_manifest["scope"] == "./"
+    assert pwa_manifest["display"] == "standalone"
+    icon_sizes = {icon["sizes"] for icon in pwa_manifest["icons"]}
+    assert {"192x192", "512x512"}.issubset(icon_sizes)
+    for icon in pwa_manifest["icons"]:
+        assert (ROOT / icon["src"]).is_file(), f"missing PWA icon {icon['src']}"
+    assert (ROOT / "assets" / "icons" / "icon-180.png").is_file()
+
+    index_text = index_path.read_text(encoding="utf-8")
+    app_text = app_path.read_text(encoding="utf-8")
+    styles_text = styles_path.read_text(encoding="utf-8")
+    worker_text = service_worker_path.read_text(encoding="utf-8")
+    assert 'rel="manifest" href="manifest.webmanifest"' in index_text
+    assert 'rel="apple-touch-icon"' in index_text
+    assert 'id="install-app"' in index_text
+    assert 'id="resume-reading"' in index_text
+    assert 'id="image-viewer"' in index_text
+    assert "viewport-fit=cover" in index_text
+    assert "beforeinstallprompt" in app_text and "registerServiceWorker" in app_text
+    assert "CACHE_CHAPTER" in app_text and "CACHE_CHAPTER" in worker_text
+    assert "CHAPTER_CACHE_PREFIX" in worker_text and "chapterCacheName" in worker_text
+    assert "data-reading-anchor" in app_text and "updatedAt" in app_text
+    assert "openImageViewer" in app_text and "handleViewerPointerMove" in app_text
+    assert "touch-action: none" in styles_text and "env(safe-area-inset" in styles_text
+    shell_match = re.search(r"const SHELL_ASSETS = \[(.*?)\];", worker_text, re.DOTALL)
+    assert shell_match, "service worker shell assets are missing"
+    shell_assets = shell_match.group(1)
+    assert "data/chapters/" not in shell_assets, "chapters must not be precached as a full book"
+    assert "assets/book-images/" not in shell_assets, "book images must be cached per visited chapter"
 
     print(
         f"OK: {len(chapters)} TOC entries (108 lessons + preface + 2 appendices), "
-        f"{len(available)} available chapter, structured content valid"
+        f"{len(available)} available chapter, structured content and PWA contracts valid"
     )
 
 

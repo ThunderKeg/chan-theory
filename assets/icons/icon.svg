@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#176b63"/>
+  <path d="M118 88h276v336H118z" fill="#fffaf2" opacity=".98"/>
+  <path d="M149 88v336M363 88v336" stroke="#dce9e4" stroke-width="8"/>
+  <path d="M162 148h188M162 364h188" stroke="#a94f37" stroke-linecap="round" stroke-width="12"/>
+  <text x="256" y="319" fill="#a94f37" font-family="STSong,SimSun,serif" font-size="188" font-weight="700" text-anchor="middle">缠</text>
+</svg>
