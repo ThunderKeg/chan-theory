@@ -80,7 +80,7 @@
     { "id": "071", "number": 71, "title": "线段划分标准的再分辨", "available": true },
     { "id": "072", "number": 72, "title": "本 ID 已有课程的再梳理", "available": true },
     { "id": "073", "number": 73, "title": "市场获利机会的绝对分类", "available": true },
-    { "id": "074", "number": 74, "title": "如何躲避政策性风险", "available": false },
+    { "id": "074", "number": 74, "title": "如何躲避政策性风险", "available": true },
     { "id": "075", "number": 75, "title": "逗庄家玩的一些杂史 1", "available": false },
     { "id": "076", "number": 76, "title": "逗庄家玩的一些杂史 2", "available": false },
     { "id": "077", "number": 77, "title": "一些概念的再分辨", "available": false },
