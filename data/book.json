@@ -63,7 +63,7 @@
     { "id": "054", "number": 54, "title": "一个具体走势的分析", "available": true },
     { "id": "055", "number": 55, "title": "买之前戏，卖之高潮", "available": true },
     { "id": "056", "number": 56, "title": "530 印花税当日行情图解", "available": true },
-    { "id": "057", "number": 57, "title": "当下图解分析再示范", "available": false },
+    { "id": "057", "number": 57, "title": "当下图解分析再示范", "available": true },
     { "id": "058", "number": 58, "title": "图解分析示范三", "available": false },
     { "id": "059", "number": 59, "title": "图解分析示范四", "available": false },
     { "id": "060", "number": 60, "title": "图解分析示范五", "available": false },
