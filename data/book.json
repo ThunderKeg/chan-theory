@@ -114,7 +114,7 @@
     { "id": "105", "number": 105, "title": "远离聪明、机械操作", "available": true },
     { "id": "106", "number": 106, "title": "均线、轮动与缠中说禅板块强弱指标", "available": false },
     { "id": "107", "number": 107, "title": "如何操作短线反弹", "available": true },
-    { "id": "108", "number": 108, "title": "何谓底部？从月线看中期走势演化", "available": false },
+    { "id": "108", "number": 108, "title": "何谓底部？从月线看中期走势演化", "available": true },
     { "id": "901", "number": 1, "kind": "appendix", "label": "附一", "title": "缠师心法荟萃", "available": false },
     { "id": "902", "number": 2, "kind": "appendix", "label": "附二", "title": "缠论经典", "available": false }
   ]
