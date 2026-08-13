@@ -2,8 +2,11 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f3eee4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="缠论 108 课" />
     <meta
       name="description"
       content="《教你炒股票》阿娇版静态阅读站：更清晰的目录、术语、定理与批注排版。"
@@ -17,7 +20,9 @@
         document.documentElement.style.setProperty("--reader-scale", `${scale}%`);
       })();
     </script>
-    <link rel="stylesheet" href="assets/styles.css?v=20260812-audio" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260813-pwa-audio" />
   </head>
   <body>
     <a class="skip-link" href="#chapter-content">跳到正文</a>
@@ -53,6 +58,12 @@
       </div>
 
       <div class="reader-tools" aria-label="阅读设置">
+        <button class="install-button" id="install-app" type="button" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v11M7.5 9.5 12 14l4.5-4.5M5 17v3h14v-3" />
+          </svg>
+          <span>安装</span>
+        </button>
         <div class="font-controls" aria-label="字号">
           <button type="button" id="font-decrease" aria-label="减小字号">A−</button>
           <button type="button" id="font-reset" aria-label="恢复默认字号">100%</button>
@@ -73,9 +84,13 @@
     <div class="site-shell">
       <aside class="book-sidebar" id="book-sidebar" aria-label="全书目录">
         <div class="sidebar__intro">
-          <span class="sample-pill">逐章校订中</span>
+          <span class="sample-pill">全书校订完成</span>
           <h1>缠论 108 课</h1>
           <p>从 PDF 到可检索、可定位、适合长时间阅读的静态书站。</p>
+          <button class="resume-reading" id="resume-reading" type="button" hidden>
+            <span>继续上次阅读</span>
+            <strong id="resume-reading-label"></strong>
+          </button>
         </div>
 
         <label class="toc-search" for="toc-search-input">
@@ -121,7 +136,45 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="update-banner" id="update-banner" role="status" aria-live="polite" hidden>
+      <div>
+        <strong>发现新版本</strong>
+        <span>更新已准备好，刷新后生效，阅读进度不会丢失。</span>
+      </div>
+      <button class="update-banner__primary" id="update-now" type="button">立即更新</button>
+      <button class="update-banner__dismiss" id="update-dismiss" type="button" aria-label="暂时关闭更新提示">稍后</button>
+    </div>
+
+    <dialog class="image-viewer" id="image-viewer" aria-labelledby="image-viewer-caption">
+      <div class="image-viewer__panel">
+        <div class="image-viewer__toolbar">
+          <p id="image-viewer-caption"></p>
+          <div class="image-viewer__actions" aria-label="图片缩放控制">
+            <button type="button" id="image-zoom-out" aria-label="缩小图片">−</button>
+            <output id="image-zoom-level" aria-live="polite">100%</output>
+            <button type="button" id="image-zoom-in" aria-label="放大图片">＋</button>
+            <button type="button" id="image-zoom-reset">复位</button>
+            <button type="button" id="image-viewer-close" aria-label="关闭图片查看">关闭</button>
+          </div>
+        </div>
+        <div class="image-viewer__stage" id="image-viewer-stage">
+          <img id="image-viewer-image" alt="" draggable="false" />
+        </div>
+        <p class="image-viewer__hint">双击或双指缩放，放大后拖动查看</p>
+      </div>
+    </dialog>
+
+    <dialog class="install-guide" id="install-guide" aria-labelledby="install-guide-title">
+      <div class="install-guide__card">
+        <span class="wordmark__seal" aria-hidden="true">缠</span>
+        <div>
+          <h2 id="install-guide-title">添加到桌面</h2>
+          <p>在 Safari 底部点“分享”，再选择“添加到主屏幕”。安装后可像 App 一样打开，并离线阅读已访问的章节。</p>
+        </div>
+        <button type="button" id="install-guide-close">知道了</button>
+      </div>
+    </dialog>
     <noscript>请启用 JavaScript 以载入章节数据和目录。</noscript>
-    <script type="module" src="assets/app.js?v=20260812-audio"></script>
+    <script type="module" src="assets/app.js?v=20260813-pwa-audio"></script>
   </body>
 </html>
