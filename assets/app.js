@@ -2,6 +2,7 @@ const STORAGE = {
   theme: "chan-reader-theme",
   scale: "chan-reader-scale",
   position: "chan-reader-position",
+  keepAwake: "chan-reader-keep-awake",
 };
 
 const SCALE_STEPS = [90, 100, 110, 120, 130];
@@ -28,6 +29,7 @@ const elements = {
   installApp: document.querySelector("#install-app"),
   installGuide: document.querySelector("#install-guide"),
   installGuideClose: document.querySelector("#install-guide-close"),
+  keepAwake: document.querySelector("#keep-awake"),
   nextChapter: document.querySelector("#next-chapter"),
   pagerMark: document.querySelector("#chapter-pager-mark"),
   previousChapter: document.querySelector("#previous-chapter"),
@@ -50,11 +52,14 @@ const state = {
   book: null,
   chapter: null,
   deferredInstallPrompt: null,
+  keepAwake: localStorage.getItem(STORAGE.keepAwake) !== "false",
   positionReady: false,
   positionSaveFrame: null,
   scale: normalizeScale(Number(localStorage.getItem(STORAGE.scale)) || 100),
   toastTimer: null,
   updateReloading: false,
+  wakeLock: null,
+  wakeLockRequest: null,
   viewer: {
     dragOrigin: null,
     lastPinchDistance: 0,
@@ -97,6 +102,96 @@ function toggleTheme() {
   document.documentElement.dataset.theme = next;
   localStorage.setItem(STORAGE.theme, next);
   showToast(next === "dark" ? "已切换为夜间阅读" : "已切换为日间阅读");
+}
+
+function updateKeepAwakeButton() {
+  const supported = "wakeLock" in navigator;
+  const active = Boolean(state.wakeLock && !state.wakeLock.released);
+  elements.keepAwake.disabled = !supported;
+  elements.keepAwake.setAttribute("aria-pressed", String(supported && state.keepAwake));
+  elements.keepAwake.dataset.active = String(active);
+
+  if (!supported) {
+    elements.keepAwake.title = "当前浏览器不支持屏幕常亮";
+  } else if (!state.keepAwake) {
+    elements.keepAwake.title = "点击开启阅读时屏幕常亮";
+  } else if (active) {
+    elements.keepAwake.title = "阅读时屏幕将保持常亮，点击可关闭";
+  } else if (state.wakeLockRequest) {
+    elements.keepAwake.title = "正在申请阅读时屏幕常亮";
+  } else {
+    elements.keepAwake.title = "屏幕常亮尚未生效，切换开关可重试";
+  }
+}
+
+async function requestScreenWakeLock({ announceFailure = false } = {}) {
+  if (
+    !state.keepAwake ||
+    !("wakeLock" in navigator) ||
+    document.visibilityState !== "visible"
+  ) {
+    updateKeepAwakeButton();
+    return false;
+  }
+  if (state.wakeLock && !state.wakeLock.released) return true;
+  if (state.wakeLockRequest) return state.wakeLockRequest;
+
+  state.wakeLockRequest = navigator.wakeLock.request("screen")
+    .then(async (sentinel) => {
+      if (!state.keepAwake || document.visibilityState !== "visible") {
+        await sentinel.release();
+        return false;
+      }
+
+      state.wakeLock = sentinel;
+      sentinel.addEventListener("release", () => {
+        if (state.wakeLock === sentinel) state.wakeLock = null;
+        updateKeepAwakeButton();
+      });
+      updateKeepAwakeButton();
+      return true;
+    })
+    .catch((error) => {
+      state.wakeLock = null;
+      updateKeepAwakeButton();
+      if (announceFailure) showToast("系统未允许屏幕常亮，请检查省电设置");
+      console.info("Screen wake lock was not granted", error);
+      return false;
+    })
+    .finally(() => {
+      state.wakeLockRequest = null;
+      updateKeepAwakeButton();
+    });
+
+  return state.wakeLockRequest;
+}
+
+async function releaseScreenWakeLock() {
+  const sentinel = state.wakeLock;
+  state.wakeLock = null;
+  updateKeepAwakeButton();
+  if (sentinel && !sentinel.released) {
+    try {
+      await sentinel.release();
+    } catch (error) {
+      console.info("Screen wake lock could not be released cleanly", error);
+    }
+  }
+}
+
+async function toggleKeepAwake() {
+  state.keepAwake = !state.keepAwake;
+  localStorage.setItem(STORAGE.keepAwake, String(state.keepAwake));
+  updateKeepAwakeButton();
+
+  if (!state.keepAwake) {
+    await releaseScreenWakeLock();
+    showToast("已关闭阅读时屏幕常亮");
+    return;
+  }
+
+  const active = await requestScreenWakeLock({ announceFailure: true });
+  if (active) showToast("阅读时屏幕将保持常亮");
 }
 
 function showToast(message) {
@@ -642,6 +737,7 @@ function bindEvents() {
   elements.fontIncrease.addEventListener("click", () => shiftScale(1));
   elements.fontReset.addEventListener("click", () => setScale(100));
   elements.themeToggle.addEventListener("click", toggleTheme);
+  elements.keepAwake.addEventListener("click", toggleKeepAwake);
   elements.installApp.addEventListener("click", installApp);
   elements.updateNow.addEventListener("click", applyPreparedUpdate);
   elements.updateDismiss.addEventListener("click", () => {
@@ -683,6 +779,14 @@ function bindEvents() {
   });
   elements.sidebarScrim.addEventListener("click", () => setSidebar(false));
   elements.search.addEventListener("input", (event) => renderToc(event.target.value));
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") requestScreenWakeLock();
+    else releaseScreenWakeLock();
+  });
+  document.addEventListener("pointerdown", () => requestScreenWakeLock(), {
+    once: true,
+    passive: true,
+  });
   window.addEventListener("scroll", updateReadingProgress, { passive: true });
   window.addEventListener("resize", updateReadingProgress, { passive: true });
   window.addEventListener("keydown", (event) => {
@@ -703,6 +807,8 @@ function bindEvents() {
 async function init() {
   bindEvents();
   setScale(state.scale, false);
+  updateKeepAwakeButton();
+  requestScreenWakeLock();
   try {
     const [book, audio] = await Promise.all([fetchJson("data/book.json"), fetchOptionalJson("data/audio.json")]);
     state.book = book;

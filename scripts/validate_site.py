@@ -177,11 +177,14 @@ def main():
     assert 'rel="manifest" href="manifest.webmanifest"' in index_text
     assert 'rel="apple-touch-icon"' in index_text
     assert 'id="install-app"' in index_text
+    assert 'id="keep-awake"' in index_text
     assert 'id="resume-reading"' in index_text
     assert 'id="image-viewer"' in index_text
     assert 'id="update-banner"' in index_text and 'id="update-now"' in index_text
     assert "viewport-fit=cover" in index_text
     assert "beforeinstallprompt" in app_text and "registerServiceWorker" in app_text
+    assert 'navigator.wakeLock.request("screen")' in app_text
+    assert "visibilitychange" in app_text and "chan-reader-keep-awake" in app_text
     assert "controllerchange" in app_text and "showUpdateBanner" in app_text
     assert "CACHE_CHAPTER" in app_text and "CACHE_CHAPTER" in worker_text
     assert "CHAPTER_CACHE_PREFIX" in worker_text and "chapterCacheName" in worker_text

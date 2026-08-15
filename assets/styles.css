@@ -200,7 +200,8 @@ input:focus-visible,
   padding: 0 max(22px, env(safe-area-inset-right)) 0 22px;
 }
 
-.install-button {
+.install-button,
+.keep-awake-button {
   display: inline-flex;
   height: 38px;
   align-items: center;
@@ -219,13 +220,36 @@ input:focus-visible,
   display: none;
 }
 
-.install-button svg {
+.install-button svg,
+.keep-awake-button svg {
   width: 18px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
+}
+
+.keep-awake-button {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+
+.keep-awake-button:hover,
+.keep-awake-button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.keep-awake-button[data-active="true"] svg {
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent) 45%, transparent));
+}
+
+.keep-awake-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .font-controls {
@@ -1358,13 +1382,15 @@ input:focus-visible,
     padding-right: max(14px, env(safe-area-inset-right));
   }
 
-  .install-button {
+  .install-button,
+  .keep-awake-button {
     width: 38px;
     padding: 0;
     justify-content: center;
   }
 
-  .install-button span {
+  .install-button span,
+  .keep-awake-button span {
     display: none;
   }
 
@@ -1540,6 +1566,7 @@ input:focus-visible,
   }
 
   .install-button,
+  .keep-awake-button,
   .image-viewer,
   .install-guide,
   .update-banner {

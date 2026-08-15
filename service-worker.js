@@ -1,12 +1,12 @@
-const CACHE_VERSION = "20260813-pwa-audio-v1";
+const CACHE_VERSION = "20260815-audio-wake-lock-v1";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260813-pwa-audio",
-  "./assets/app.js?v=20260813-pwa-audio",
+  "./assets/styles.css?v=20260815-audio-wake-lock",
+  "./assets/app.js?v=20260815-audio-wake-lock",
   "./data/book.json",
   "./data/audio.json",
   "./manifest.webmanifest",
