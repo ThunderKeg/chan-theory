@@ -1,12 +1,12 @@
-const CACHE_VERSION = "20260816-reader-notes-v1";
+const CACHE_VERSION = "20260816-note-tree-folding-v1";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260816-reader-notes",
-  "./assets/app.js?v=20260816-reader-notes",
+  "./assets/styles.css?v=20260816-note-tree-folding",
+  "./assets/app.js?v=20260816-note-tree-folding",
   "./data/book.json",
   "./data/audio.json",
   "./data/notes/index.json",

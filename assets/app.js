@@ -470,16 +470,24 @@ function renderSummaryContent(note) {
   return section;
 }
 
-function renderFullDecisionNode(nodesById, nodeId, path = []) {
+function renderFullDecisionNode(nodesById, nodeId, path = [], depth = 0) {
   const node = nodesById.get(nodeId);
-  const wrapper = el("div", `decision-tree-full__node is-${node.kind}`);
+  const wrapper = el(node.kind === "question" ? "details" : "div", `decision-tree-full__node is-${node.kind}`);
   const heading = el("div", "decision-tree-full__heading");
   heading.append(
     el("span", "decision-tree-full__kind", node.kind === "question" ? "判断" : "结论"),
     el("strong", "", node.title)
   );
   if (node.likelihood) heading.append(el("span", "likelihood", `【${node.likelihood}】`));
-  wrapper.append(heading, el("p", "", node.detail));
+  if (node.kind === "question") {
+    const summary = el("summary", "");
+    summary.append(heading);
+    wrapper.open = depth < 2;
+    wrapper.append(summary);
+  } else {
+    wrapper.append(heading);
+  }
+  wrapper.append(el("p", "", node.detail));
   if (node.action) wrapper.append(el("p", "decision-action", `行动：${node.action}`));
 
   if (node.kind === "question") {
@@ -495,7 +503,7 @@ function renderFullDecisionNode(nodesById, nodeId, path = []) {
       if (path.includes(branch.to)) {
         item.append(el("p", "decision-tree-full__shared", `转到“${nodesById.get(branch.to).title}”`));
       } else {
-        item.append(renderFullDecisionNode(nodesById, branch.to, [...path, nodeId]));
+        item.append(renderFullDecisionNode(nodesById, branch.to, [...path, nodeId], depth + 1));
       }
       branches.append(item);
     });
@@ -529,7 +537,18 @@ function renderDecisionTreeContent(note) {
     if (fullTree) {
       const full = el("div", "decision-tree-full");
       full.setAttribute("aria-label", "完整决策树");
-      full.append(renderFullDecisionNode(nodesById, content.rootId));
+      const foldControls = el("div", "decision-tree-full__controls");
+      const expandAll = el("button", "", "全部展开");
+      const collapseAll = el("button", "", "全部折叠");
+      [expandAll, collapseAll].forEach((button) => { button.type = "button"; });
+      expandAll.addEventListener("click", () => {
+        full.querySelectorAll("details").forEach((details) => { details.open = true; });
+      });
+      collapseAll.addEventListener("click", () => {
+        full.querySelectorAll("details").forEach((details) => { details.open = false; });
+      });
+      foldControls.append(expandAll, collapseAll);
+      full.append(foldControls, renderFullDecisionNode(nodesById, content.rootId));
       stage.append(full);
       return;
     }

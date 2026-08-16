@@ -195,8 +195,11 @@ def main():
     assert "data/notes/index.json" in app_text and "openChapterNotes" in app_text
     assert "renderDecisionTreeContent" in app_text and "openAllNotes" in app_text
     assert "heading.tabIndex = -1" in app_text and "返回上一步" in app_text
+    assert 'node.kind === "question" ? "details" : "div"' in app_text
+    assert "全部展开" in app_text and "全部折叠" in app_text
     assert "touch-action: none" in styles_text and "env(safe-area-inset" in styles_text
     assert ".notes-dialog" in styles_text and "@media (max-width: 380px)" in styles_text
+    assert ".decision-tree-full__node.is-question[open]" in styles_text
     assert "overflow-wrap: anywhere" in styles_text and "overflow-x: hidden" in styles_text
     shell_match = re.search(r"const SHELL_ASSETS = \[(.*?)\];", worker_text, re.DOTALL)
     assert shell_match, "service worker shell assets are missing"
