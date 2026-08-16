@@ -39,6 +39,7 @@ const elements = {
   search: document.querySelector("#toc-search-input"),
   sidebarScrim: document.querySelector("#sidebar-scrim"),
   themeToggle: document.querySelector("#theme-toggle"),
+  themeColor: document.querySelector("#theme-color"),
   toast: document.querySelector("#toast"),
   tocToggle: document.querySelector("#toc-toggle"),
   topbarChapter: document.querySelector("#topbar-chapter"),
@@ -100,6 +101,7 @@ function shiftScale(direction) {
 function toggleTheme() {
   const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = next;
+  elements.themeColor.content = next === "dark" ? "#151914" : "#f3eee4";
   localStorage.setItem(STORAGE.theme, next);
   showToast(next === "dark" ? "已切换为夜间阅读" : "已切换为日间阅读");
 }

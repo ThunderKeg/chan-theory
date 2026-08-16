@@ -5,9 +5,10 @@ import vm from "node:vm";
 const root = new URL("../", import.meta.url);
 const readText = (path) => readFile(new URL(path, root), "utf8");
 
-const [indexHtml, appSource, workerSource, manifestSource, chapterSource] = await Promise.all([
+const [indexHtml, appSource, stylesSource, workerSource, manifestSource, chapterSource] = await Promise.all([
   readText("index.html"),
   readText("assets/app.js"),
+  readText("assets/styles.css"),
   readText("service-worker.js"),
   readText("manifest.webmanifest"),
   readText("data/chapters/001.json"),
@@ -17,13 +18,22 @@ const chapter = JSON.parse(chapterSource);
 
 assert.equal(manifest.display, "standalone");
 assert.equal(manifest.start_url, "./?resume=1");
+assert.equal(manifest.display_override[0], "window-controls-overlay");
 assert.match(indexHtml, /rel="manifest"/);
+assert.match(indexHtml, /id="theme-color"/);
 assert.match(indexHtml, /id="install-app"/);
 assert.match(indexHtml, /id="keep-awake"/);
 assert.match(indexHtml, /id="resume-reading"/);
 assert.match(indexHtml, /id="image-viewer"/);
 assert.match(indexHtml, /id="update-banner"/);
 assert.match(appSource, /beforeinstallprompt/);
+assert.match(appSource, /elements\.themeColor\.content/);
+assert.match(indexHtml, /20260816-windows-titlebar/);
+assert.match(workerSource, /20260816-windows-titlebar-v1/);
+assert.match(stylesSource, /display-mode:\s*window-controls-overlay/);
+assert.match(stylesSource, /env\(titlebar-area-x/);
+assert.match(stylesSource, /env\(titlebar-area-width/);
+assert.match(stylesSource, /app-region:\s*drag/);
 assert.match(appSource, /navigator\.wakeLock\.request\("screen"\)/);
 assert.match(appSource, /visibilitychange/);
 assert.match(appSource, /chan-reader-keep-awake/);

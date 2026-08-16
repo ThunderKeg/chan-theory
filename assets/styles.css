@@ -131,6 +131,26 @@ input:focus-visible,
   backdrop-filter: blur(18px) saturate(135%);
 }
 
+@media (display-mode: window-controls-overlay) {
+  .topbar {
+    min-height: max(var(--topbar-height), env(titlebar-area-height, 0px));
+    padding-left: env(titlebar-area-x, 0px);
+    padding-right: max(
+      0px,
+      calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw))
+    );
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+
+  .topbar a,
+  .topbar button,
+  .topbar .font-controls {
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+  }
+}
+
 .topbar__brand {
   display: flex;
   align-items: center;
