@@ -75,6 +75,7 @@ a {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
+summary:focus-visible,
 [tabindex]:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--accent) 52%, transparent);
   outline-offset: 3px;
@@ -1331,6 +1332,7 @@ input:focus-visible,
 
 .notes-panel__header button,
 .decision-tree__controls button,
+.decision-tree-full__controls button,
 .notes-error button {
   min-height: 38px;
   padding: 0 13px;
@@ -1601,9 +1603,52 @@ input:focus-visible,
   padding: 4px 0;
 }
 
+.decision-tree-full__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 4px 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
 .decision-tree-full__node {
   min-width: 0;
   padding: 14px 0 4px;
+}
+
+.decision-tree-full__node.is-question > summary {
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.decision-tree-full__node.is-question > summary::-webkit-details-marker {
+  display: none;
+}
+
+.decision-tree-full__node.is-question > summary:hover {
+  background: color-mix(in srgb, var(--accent-soft) 44%, transparent);
+}
+
+.decision-tree-full__node.is-question > summary .decision-tree-full__heading::before {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  content: "›";
+  font-family: var(--sans);
+  font-size: 17px;
+  transform: rotate(0deg);
+  transition: transform 160ms ease;
+}
+
+.decision-tree-full__node.is-question[open] > summary .decision-tree-full__heading::before {
+  transform: rotate(90deg);
 }
 
 .decision-tree-full__heading,
