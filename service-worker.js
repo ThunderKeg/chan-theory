@@ -1,12 +1,12 @@
-const CACHE_VERSION = "20260816-note-tree-folding-v1";
+const CACHE_VERSION = "20260816-update-prompt-fix-v1";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260816-note-tree-folding",
-  "./assets/app.js?v=20260816-note-tree-folding",
+  "./assets/styles.css?v=20260816-update-prompt-fix",
+  "./assets/app.js?v=20260816-update-prompt-fix",
   "./data/book.json",
   "./data/audio.json",
   "./data/notes/index.json",
