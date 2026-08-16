@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "chapters": [
+    {
+      "chapterId": "011",
+      "path": "data/notes/011.json",
+      "count": 2,
+      "notes": [
+        {
+          "id": "011-moving-average-decision-tree",
+          "type": "decision-tree",
+          "title": "长短均线关系决策树",
+          "tags": ["均线", "飞吻", "唇吻", "湿吻"]
+        },
+        {
+          "id": "011-wet-kiss-trading-range",
+          "type": "summary",
+          "title": "湿吻与 Trading Range",
+          "tags": ["湿吻", "Trading Range", "Price Action"]
+        }
+      ]
+    }
+  ]
+}

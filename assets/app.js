@@ -10,9 +10,13 @@ const VIEWER_SCALE_MIN = 1;
 const VIEWER_SCALE_MAX = 5;
 
 const elements = {
+  allNotes: document.querySelector("#all-notes"),
+  allNotesCount: document.querySelector("#all-notes-count"),
   article: document.querySelector("#chapter-content"),
   chapterError: document.querySelector("#chapter-error"),
   chapterList: document.querySelector("#chapter-list"),
+  chapterNotes: document.querySelector("#chapter-notes"),
+  chapterNotesCount: document.querySelector("#chapter-notes-count"),
   availableCount: document.querySelector("#toc-available-count"),
   fontDecrease: document.querySelector("#font-decrease"),
   fontIncrease: document.querySelector("#font-increase"),
@@ -31,6 +35,11 @@ const elements = {
   installGuideClose: document.querySelector("#install-guide-close"),
   keepAwake: document.querySelector("#keep-awake"),
   nextChapter: document.querySelector("#next-chapter"),
+  notesDialog: document.querySelector("#notes-dialog"),
+  notesDialogClose: document.querySelector("#notes-dialog-close"),
+  notesDialogKicker: document.querySelector("#notes-dialog-kicker"),
+  notesDialogTitle: document.querySelector("#notes-dialog-title"),
+  notesPanelBody: document.querySelector("#notes-panel-body"),
   pagerMark: document.querySelector("#chapter-pager-mark"),
   previousChapter: document.querySelector("#previous-chapter"),
   progress: document.querySelector("#reading-progress-bar"),
@@ -54,6 +63,8 @@ const state = {
   chapter: null,
   deferredInstallPrompt: null,
   keepAwake: localStorage.getItem(STORAGE.keepAwake) !== "false",
+  noteBundles: new Map(),
+  notesIndex: null,
   positionReady: false,
   positionSaveFrame: null,
   scale: normalizeScale(Number(localStorage.getItem(STORAGE.scale)) || 100),
@@ -249,6 +260,23 @@ function audioForChapter(chapterId) {
   return state.audio?.items?.[chapterId] || null;
 }
 
+function noteIndexEntry(chapterId) {
+  return state.notesIndex?.chapters?.find((entry) => entry.chapterId === chapterId) || null;
+}
+
+function updateNotesEntrances() {
+  const chapterEntry = state.chapter && noteIndexEntry(state.chapter.id);
+  const chapterCount = chapterEntry?.count || 0;
+  elements.chapterNotes.hidden = chapterCount === 0;
+  elements.chapterNotesCount.textContent = String(chapterCount);
+  elements.chapterNotes.setAttribute("aria-label", `打开本课笔记，共 ${chapterCount} 条`);
+
+  const total = (state.notesIndex?.chapters || []).reduce((sum, entry) => sum + entry.count, 0);
+  elements.allNotes.hidden = total === 0;
+  elements.allNotesCount.textContent = String(total);
+  elements.allNotes.setAttribute("aria-label", `打开全书笔记，共 ${total} 条`);
+}
+
 function formatDuration(seconds) {
   if (!Number.isFinite(seconds) || seconds <= 0) return "";
   const minutes = Math.floor(seconds / 60);
@@ -373,6 +401,282 @@ function renderAudioPlayer(chapter) {
 
   panel.append(copy, player, download);
   return panel;
+}
+
+function chapterLabel(chapterId) {
+  const chapter = state.book?.chapters?.find((item) => item.id === chapterId);
+  if (!chapter) return `章节 ${chapterId}`;
+  if (chapter.kind === "preface") return "序章";
+  if (chapter.kind === "appendix") return chapter.label || chapter.title;
+  return `第 ${chapter.number} 课`;
+}
+
+function showNotesDialog(kicker, title) {
+  elements.notesDialogKicker.textContent = kicker;
+  elements.notesDialogTitle.textContent = title;
+  if (!elements.notesDialog.open) elements.notesDialog.showModal();
+}
+
+function renderNotesLoading() {
+  const loading = el("div", "notes-loading");
+  loading.append(el("span", ""), el("span", ""), el("span", ""), el("p", "", "正在载入笔记…"));
+  elements.notesPanelBody.replaceChildren(loading);
+}
+
+async function loadNotesBundle(chapterId) {
+  if (state.noteBundles.has(chapterId)) return state.noteBundles.get(chapterId);
+  const entry = noteIndexEntry(chapterId);
+  if (!entry) throw new Error("本章没有笔记索引");
+  const bundle = await fetchJson(entry.path);
+  state.noteBundles.set(chapterId, bundle);
+  return bundle;
+}
+
+function noteTypeLabel(type) {
+  return type === "decision-tree" ? "决策树" : "总结";
+}
+
+function renderNatureBadges(natures) {
+  const row = el("div", "note-natures");
+  (natures || []).forEach((nature) => row.append(el("span", "note-nature", nature)));
+  return row;
+}
+
+function renderSourceRefs(note) {
+  const details = el("details", "note-sources");
+  details.append(el("summary", "", "原文依据"));
+  const list = el("ul", "");
+  note.sourceRefs.forEach((ref) => {
+    const item = el("li", "");
+    const link = el("a", "", `${chapterLabel(ref.chapterId)} · PDF 第 ${ref.pages.join("–")} 页`);
+    link.href = `?chapter=${encodeURIComponent(ref.chapterId)}#${encodeURIComponent(ref.sectionId)}`;
+    link.addEventListener("click", () => elements.notesDialog.close());
+    item.append(link, el("p", "", ref.description));
+    list.append(item);
+  });
+  details.append(list);
+  return details;
+}
+
+function renderSummaryContent(note) {
+  const content = note.content;
+  const section = el("section", "note-summary");
+  (content.paragraphs || []).forEach((paragraph) => section.append(el("p", "", paragraph)));
+  if (content.items?.length) {
+    const list = el("ul", "");
+    content.items.forEach((item) => list.append(el("li", "", item)));
+    section.append(list);
+  }
+  return section;
+}
+
+function renderFullDecisionNode(nodesById, nodeId, path = []) {
+  const node = nodesById.get(nodeId);
+  const wrapper = el("div", `decision-tree-full__node is-${node.kind}`);
+  const heading = el("div", "decision-tree-full__heading");
+  heading.append(
+    el("span", "decision-tree-full__kind", node.kind === "question" ? "判断" : "结论"),
+    el("strong", "", node.title)
+  );
+  if (node.likelihood) heading.append(el("span", "likelihood", `【${node.likelihood}】`));
+  wrapper.append(heading, el("p", "", node.detail));
+  if (node.action) wrapper.append(el("p", "decision-action", `行动：${node.action}`));
+
+  if (node.kind === "question") {
+    const branches = el("ol", "decision-tree-full__branches");
+    node.branches.forEach((branch) => {
+      const item = el("li", "");
+      const branchLabel = el("div", "decision-tree-full__branch");
+      branchLabel.append(
+        el("span", "", branch.label),
+        el("span", "likelihood", `【${branch.likelihood}】`)
+      );
+      item.append(branchLabel);
+      if (path.includes(branch.to)) {
+        item.append(el("p", "decision-tree-full__shared", `转到“${nodesById.get(branch.to).title}”`));
+      } else {
+        item.append(renderFullDecisionNode(nodesById, branch.to, [...path, nodeId]));
+      }
+      branches.append(item);
+    });
+    wrapper.append(branches);
+  }
+  return wrapper;
+}
+
+function renderDecisionTreeContent(note) {
+  const content = note.content;
+  const nodesById = new Map(content.nodes.map((node) => [node.id, node]));
+  const tree = el("section", "decision-tree");
+  const controls = el("div", "decision-tree__controls");
+  const back = el("button", "", "返回上一步");
+  const restart = el("button", "", "重新开始");
+  const toggleFull = el("button", "decision-tree__full-toggle", "查看完整树");
+  [back, restart, toggleFull].forEach((button) => { button.type = "button"; });
+  controls.append(back, restart, toggleFull);
+  const stage = el("div", "decision-tree__stage");
+  tree.append(controls, stage);
+
+  let history = [content.rootId];
+  let fullTree = false;
+
+  const render = (focusHeading = false) => {
+    back.hidden = fullTree;
+    back.disabled = history.length <= 1;
+    toggleFull.textContent = fullTree ? "返回逐步判断" : "查看完整树";
+    stage.replaceChildren();
+
+    if (fullTree) {
+      const full = el("div", "decision-tree-full");
+      full.setAttribute("aria-label", "完整决策树");
+      full.append(renderFullDecisionNode(nodesById, content.rootId));
+      stage.append(full);
+      return;
+    }
+
+    const node = nodesById.get(history.at(-1));
+    const step = el("article", `decision-step is-${node.kind}`);
+    step.append(el("span", "decision-step__counter", `第 ${history.length} 步`));
+    const heading = el("h3", "", node.title);
+    heading.tabIndex = -1;
+    step.append(heading, el("p", "decision-step__detail", node.detail));
+
+    if (node.kind === "question") {
+      const choices = el("div", "decision-choices");
+      node.branches.forEach((branch) => {
+        const button = el("button", "decision-choice");
+        button.type = "button";
+        button.append(
+          el("span", "decision-choice__label", branch.label),
+          el("span", "likelihood", `【${branch.likelihood}】`)
+        );
+        button.addEventListener("click", () => {
+          history.push(branch.to);
+          render(true);
+        });
+        choices.append(button);
+      });
+      step.append(choices);
+    } else {
+      const result = el("div", "decision-result");
+      result.append(
+        el("strong", "likelihood", `【${node.likelihood}】`),
+        el("p", "decision-action", `行动：${node.action}`)
+      );
+      step.append(result);
+    }
+    stage.append(step);
+    if (focusHeading) window.requestAnimationFrame(() => heading.focus());
+  };
+
+  back.addEventListener("click", () => {
+    if (history.length > 1) history.pop();
+    render(true);
+  });
+  restart.addEventListener("click", () => {
+    history = [content.rootId];
+    fullTree = false;
+    render(true);
+  });
+  toggleFull.addEventListener("click", () => {
+    fullTree = !fullTree;
+    render(false);
+  });
+  render();
+  return tree;
+}
+
+function renderNoteView(note) {
+  const view = el("article", "note-view");
+  const heading = el("header", "note-heading");
+  heading.append(el("span", "note-type", noteTypeLabel(note.type)), el("h3", "", note.title));
+  heading.append(renderNatureBadges(note.content.nature));
+  const tags = el("div", "note-tags");
+  note.tags.forEach((tag) => tags.append(el("span", "", `#${tag}`)));
+  heading.append(tags);
+  view.append(heading, el("p", "note-lead", note.content.lead));
+
+  if (note.type === "decision-tree") {
+    const principle = el("aside", "note-principle");
+    principle.append(el("strong", "", "概率提醒"), el("p", "", note.content.principle));
+    view.append(principle, renderDecisionTreeContent(note));
+  } else {
+    view.append(renderSummaryContent(note));
+  }
+  view.append(renderSourceRefs(note));
+  return view;
+}
+
+function renderNotesBundle(bundle, selectedId = null) {
+  const selected = bundle.notes.find((note) => note.id === selectedId) || bundle.notes[0];
+  const tabs = el("nav", "note-tabs");
+  tabs.setAttribute("aria-label", "本章笔记");
+  bundle.notes.forEach((note) => {
+    const button = el("button", "", note.title);
+    button.type = "button";
+    const active = note.id === selected.id;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-current", active ? "true" : "false");
+    button.addEventListener("click", () => renderNotesBundle(bundle, note.id));
+    tabs.append(button);
+  });
+  elements.notesPanelBody.replaceChildren(tabs, renderNoteView(selected));
+}
+
+function renderNotesError(message) {
+  const error = el("div", "notes-error");
+  error.append(el("strong", "", "笔记暂时无法载入"), el("p", "", message));
+  const back = el("button", "", "返回全书笔记");
+  back.type = "button";
+  back.addEventListener("click", openAllNotes);
+  error.append(back);
+  elements.notesPanelBody.replaceChildren(error);
+}
+
+async function openChapterNotes(chapterId, selectedId = null) {
+  const entry = noteIndexEntry(chapterId);
+  if (!entry) return;
+  const chapter = state.book.chapters.find((item) => item.id === chapterId);
+  showNotesDialog(`${chapterLabel(chapterId)} · ${entry.count} 条笔记`, chapter?.title || "本课笔记");
+  renderNotesLoading();
+  try {
+    const bundle = await loadNotesBundle(chapterId);
+    renderNotesBundle(bundle, selectedId);
+  } catch (error) {
+    renderNotesError(error.message);
+  }
+}
+
+function openAllNotes() {
+  const entries = state.notesIndex?.chapters || [];
+  const total = entries.reduce((sum, entry) => sum + entry.count, 0);
+  showNotesDialog("全书笔记", `已整理 ${total} 条笔记`);
+  const index = el("div", "all-notes-index");
+  index.append(el("p", "all-notes-index__intro", "按章节列出已有笔记；打开具体笔记时才载入该课笔记文件。"));
+  entries.forEach((entry) => {
+    const chapter = state.book.chapters.find((item) => item.id === entry.chapterId);
+    const group = el("section", "all-notes-group");
+    const heading = el("header", "");
+    heading.append(
+      el("span", "", chapterLabel(entry.chapterId)),
+      el("h3", "", chapter?.title || entry.chapterId),
+      el("b", "", `${entry.count} 条`)
+    );
+    group.append(heading);
+    entry.notes.forEach((note) => {
+      const button = el("button", "all-notes-item");
+      button.type = "button";
+      button.append(
+        el("span", "note-type", noteTypeLabel(note.type)),
+        el("strong", "", note.title),
+        el("small", "", note.tags.map((tag) => `#${tag}`).join("  "))
+      );
+      button.addEventListener("click", () => openChapterNotes(entry.chapterId, note.id));
+      group.append(button);
+    });
+    index.append(group);
+  });
+  elements.notesPanelBody.replaceChildren(index);
 }
 
 function renderNote(block) {
@@ -582,11 +886,13 @@ function applyPreparedUpdate() {
 
 function cacheCurrentChapter() {
   if (!("serviceWorker" in navigator) || !state.chapter) return;
+  const noteEntry = noteIndexEntry(state.chapter.id);
   navigator.serviceWorker.ready.then((registration) => {
     const worker = navigator.serviceWorker.controller || registration.active;
     worker?.postMessage({
       type: "CACHE_CHAPTER",
       url: new URL(`data/chapters/${state.chapter.id}.json`, document.baseURI).href,
+      noteUrl: noteEntry ? new URL(noteEntry.path, document.baseURI).href : null,
     });
   }).catch(() => {});
 }
@@ -735,6 +1041,13 @@ function restoreReadingPosition() {
 }
 
 function bindEvents() {
+  elements.allNotes.addEventListener("click", () => {
+    setSidebar(false);
+    openAllNotes();
+  });
+  elements.chapterNotes.addEventListener("click", () => {
+    if (state.chapter) openChapterNotes(state.chapter.id);
+  });
   elements.fontDecrease.addEventListener("click", () => shiftScale(-1));
   elements.fontIncrease.addEventListener("click", () => shiftScale(1));
   elements.fontReset.addEventListener("click", () => setScale(100));
@@ -750,6 +1063,10 @@ function bindEvents() {
     if (elements.resumeReading.dataset.chapterId) navigateToChapter(elements.resumeReading.dataset.chapterId);
   });
   elements.imageViewerClose.addEventListener("click", closeImageViewer);
+  elements.notesDialogClose.addEventListener("click", () => elements.notesDialog.close());
+  elements.notesDialog.addEventListener("click", (event) => {
+    if (event.target === elements.notesDialog) elements.notesDialog.close();
+  });
   elements.imageZoomIn.addEventListener("click", () => setViewerScale(state.viewer.scale + 0.5));
   elements.imageZoomOut.addEventListener("click", () => setViewerScale(state.viewer.scale - 0.5));
   elements.imageZoomReset.addEventListener("click", resetImageViewer);
@@ -812,9 +1129,14 @@ async function init() {
   updateKeepAwakeButton();
   requestScreenWakeLock();
   try {
-    const [book, audio] = await Promise.all([fetchJson("data/book.json"), fetchOptionalJson("data/audio.json")]);
+    const [book, audio, notesIndex] = await Promise.all([
+      fetchJson("data/book.json"),
+      fetchOptionalJson("data/audio.json"),
+      fetchOptionalJson("data/notes/index.json"),
+    ]);
     state.book = book;
     state.audio = audio;
+    state.notesIndex = notesIndex;
     const requestedId = chapterIdFromUrl();
     const saved = readSavedPosition();
     const shouldResume = !requestedId || new URLSearchParams(window.location.search).get("resume") === "1";
@@ -833,6 +1155,7 @@ async function init() {
     state.chapter = await fetchJson(`data/chapters/${target.id}.json`);
     renderToc();
     updateResumeReading();
+    updateNotesEntrances();
     renderChapter(state.chapter);
     updatePager();
     cacheCurrentChapter();

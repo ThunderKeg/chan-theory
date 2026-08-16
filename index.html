@@ -23,7 +23,7 @@
     </script>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
-    <link rel="stylesheet" href="assets/styles.css?v=20260816-windows-titlebar" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260816-reader-notes" />
   </head>
   <body>
     <a class="skip-link" href="#chapter-content">跳到正文</a>
@@ -59,6 +59,17 @@
       </div>
 
       <div class="reader-tools" aria-label="阅读设置">
+        <button
+          class="notes-button"
+          id="chapter-notes"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="notes-dialog"
+          hidden
+        >
+          <span>笔记</span>
+          <strong id="chapter-notes-count">0</strong>
+        </button>
         <button class="install-button" id="install-app" type="button" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 3v11M7.5 9.5 12 14l4.5-4.5M5 17v3h14v-3" />
@@ -105,6 +116,13 @@
           <button class="resume-reading" id="resume-reading" type="button" hidden>
             <span>继续上次阅读</span>
             <strong id="resume-reading-label"></strong>
+          </button>
+          <button class="all-notes" id="all-notes" type="button" aria-haspopup="dialog" hidden>
+            <span>
+              <strong>全书笔记</strong>
+              <small>按章节查看整理与延伸</small>
+            </span>
+            <b id="all-notes-count">0</b>
           </button>
         </div>
 
@@ -179,6 +197,19 @@
       </div>
     </dialog>
 
+    <dialog class="notes-dialog" id="notes-dialog" aria-labelledby="notes-dialog-title">
+      <section class="notes-panel">
+        <header class="notes-panel__header">
+          <div>
+            <span id="notes-dialog-kicker">读书笔记</span>
+            <h2 id="notes-dialog-title">本课笔记</h2>
+          </div>
+          <button id="notes-dialog-close" type="button" aria-label="关闭笔记面板">关闭</button>
+        </header>
+        <div class="notes-panel__body" id="notes-panel-body"></div>
+      </section>
+    </dialog>
+
     <dialog class="install-guide" id="install-guide" aria-labelledby="install-guide-title">
       <div class="install-guide__card">
         <span class="wordmark__seal" aria-hidden="true">缠</span>
@@ -190,6 +221,6 @@
       </div>
     </dialog>
     <noscript>请启用 JavaScript 以载入章节数据和目录。</noscript>
-    <script type="module" src="assets/app.js?v=20260816-windows-titlebar"></script>
+    <script type="module" src="assets/app.js?v=20260816-reader-notes"></script>
   </body>
 </html>

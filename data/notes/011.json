@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "chapterId": "011",
+  "notes": [
+    {
+      "schemaVersion": 1,
+      "id": "011-moving-average-decision-tree",
+      "chapterId": "011",
+      "type": "decision-tree",
+      "title": "长短均线关系决策树",
+      "tags": ["均线", "飞吻", "唇吻", "湿吻"],
+      "sourceRefs": [
+        {
+          "chapterId": "011",
+          "sectionId": "source-text",
+          "pages": [32, 33],
+          "description": "均线参数、三种“吻”的定义及其趋势含义"
+        },
+        {
+          "chapterId": "011",
+          "sectionId": "source-text",
+          "pages": [33, 33],
+          "description": "第一次湿吻、反复湿吻箱体与长期男上位后的空头陷阱"
+        }
+      ],
+      "content": {
+        "nature": ["原文提炼", "个人理解"],
+        "lead": "先选择与资金量、操作时间匹配的均线参数，再判断短均线相对长均线的位置和“吻”的类型。均线关系用于分类，不是看到交叉就机械买卖。",
+        "principle": "原文说多数行情转折在很大几率上由湿吻引发；这不等于看到湿吻就一定反转。湿吻之后仍要判断最终形成女上位还是男上位。",
+        "rootId": "match-context",
+        "nodes": [
+          {
+            "id": "match-context",
+            "kind": "question",
+            "title": "这组长短均线与自己的操作周期匹配吗？",
+            "detail": "均线参数必须与资金量和操作时间相匹配；脱离这个前提，后续强弱判断没有统一意义。",
+            "branches": [
+              {
+                "label": "匹配，继续判断",
+                "likelihood": "需要确认",
+                "to": "orientation"
+              },
+              {
+                "label": "不匹配或不确定",
+                "likelihood": "需要确认",
+                "to": "reset-parameters"
+              }
+            ]
+          },
+          {
+            "id": "reset-parameters",
+            "kind": "result",
+            "title": "先重新选择参数",
+            "detail": "短线、小资金和大资金所关心的强弱尺度不同，不能用同一组均线直接得出相同决策。",
+            "likelihood": "需要确认",
+            "action": "先明确持有周期和可承受的波动，再选择相应的长短均线。"
+          },
+          {
+            "id": "orientation",
+            "kind": "question",
+            "title": "短均线相对长均线处于什么位置？",
+            "detail": "短均线在上称为女上位，表示多头结构；短均线在下称为男上位，表示空头结构。",
+            "branches": [
+              {
+                "label": "短均线在上：女上位",
+                "likelihood": "需要确认",
+                "to": "bull-kiss"
+              },
+              {
+                "label": "短均线在下：男上位",
+                "likelihood": "需要确认",
+                "to": "bear-kiss"
+              },
+              {
+                "label": "已经穿越或反复缠绕",
+                "likelihood": "方向不明",
+                "to": "first-wet-kiss"
+              }
+            ]
+          },
+          {
+            "id": "bull-kiss",
+            "kind": "question",
+            "title": "女上位中的调整属于哪种“吻”？",
+            "detail": "观察短均线是略走平、只靠近长均线，还是已经穿越并发生缠绕。",
+            "branches": [
+              {
+                "label": "飞吻：略走平后继续向上",
+                "likelihood": "少见",
+                "to": "bull-fly-kiss"
+              },
+              {
+                "label": "唇吻：靠近但未跌破长均线",
+                "likelihood": "最常见",
+                "to": "bull-lip-kiss"
+              },
+              {
+                "label": "湿吻：跌破或反复缠绕",
+                "likelihood": "需要确认",
+                "to": "first-wet-kiss"
+              }
+            ]
+          },
+          {
+            "id": "bear-kiss",
+            "kind": "question",
+            "title": "男上位中的反弹属于哪种“吻”？",
+            "detail": "观察短均线是略走平、只靠近长均线，还是已经升破并发生缠绕。",
+            "branches": [
+              {
+                "label": "飞吻：略走平后继续向下",
+                "likelihood": "少见",
+                "to": "bear-fly-kiss"
+              },
+              {
+                "label": "唇吻：靠近但未升破长均线",
+                "likelihood": "最常见",
+                "to": "bear-lip-kiss"
+              },
+              {
+                "label": "湿吻：升破或反复缠绕",
+                "likelihood": "需要确认",
+                "to": "first-wet-kiss"
+              }
+            ]
+          },
+          {
+            "id": "bull-fly-kiss",
+            "kind": "result",
+            "title": "强势上涨大概率延续",
+            "detail": "飞吻较少见，通常发生在特别强烈的趋势中；原趋势延续后也要防备过热带来的震荡。",
+            "likelihood": "概率较大",
+            "action": "以持有和观察为主，不把趋势过热当成追高理由。"
+          },
+          {
+            "id": "bull-lip-kiss",
+            "kind": "result",
+            "title": "调整结束的概率较大",
+            "detail": "女上位中的唇吻通常是趋势中继，但仍需防范短均线进一步跌破长均线，演变成湿吻。",
+            "likelihood": "概率较大",
+            "action": "等待短均线重新向上、女上位保持，再按原多头结构处理。"
+          },
+          {
+            "id": "bear-fly-kiss",
+            "kind": "result",
+            "title": "强势下跌大概率延续",
+            "detail": "飞吻说明空头趋势很强，短均线略走平后便恢复原来的向下方向。",
+            "likelihood": "概率较大",
+            "action": "以回避和风险控制为主，不因短暂走平抢反弹。"
+          },
+          {
+            "id": "bear-lip-kiss",
+            "kind": "result",
+            "title": "反弹结束的概率较大",
+            "detail": "原文强调男上位中最常见唇吻，短均线靠近但未升破长均线时，反弹基本应当结束。",
+            "likelihood": "概率较大",
+            "action": "不把靠近长均线误当成反转；继续观察是否升破并演变成湿吻。"
+          },
+          {
+            "id": "first-wet-kiss",
+            "kind": "question",
+            "title": "这是趋势形成后的第一次湿吻吗？",
+            "detail": "第一次湿吻不能套用“长期男上位后空头陷阱概率很大”的判断。",
+            "branches": [
+              {
+                "label": "是第一次湿吻",
+                "likelihood": "方向不明",
+                "to": "first-wet-wait"
+              },
+              {
+                "label": "不是，趋势已经持续较久",
+                "likelihood": "需要确认",
+                "to": "wet-pattern"
+              },
+              {
+                "label": "暂时无法确定",
+                "likelihood": "需要确认",
+                "to": "wet-wait"
+              }
+            ]
+          },
+          {
+            "id": "first-wet-wait",
+            "kind": "result",
+            "title": "第一次湿吻不能直接判反转",
+            "detail": "此时原趋势延续还是发生体位转换都尚未明确，尤其不能直接套用长期空头后的介入逻辑。",
+            "likelihood": "方向不明",
+            "action": "等待短均线重新稳定在长均线的一侧，并结合后续价格结构确认。"
+          },
+          {
+            "id": "wet-wait",
+            "kind": "result",
+            "title": "湿吻结构仍需观察",
+            "detail": "一次均线穿越只说明原趋势的确定性下降，不能单凭交叉判断高潮的方向。",
+            "likelihood": "需要确认",
+            "action": "继续观察是否沿原趋势冲刺、反复缠绕成箱体，或形成稳定的新体位。"
+          },
+          {
+            "id": "wet-pattern",
+            "kind": "question",
+            "title": "湿吻之后形成了什么结构？",
+            "detail": "原文列出沿原趋势制造陷阱后转折，以及反复湿吻构造转折性箱体两条路径，并特别提示长期男上位后的空头陷阱。",
+            "branches": [
+              {
+                "label": "沿原趋势出现一次猛烈冲刺",
+                "likelihood": "需要确认",
+                "to": "final-climax"
+              },
+              {
+                "label": "反复湿吻，构造箱体",
+                "likelihood": "方向不明",
+                "to": "box-orientation"
+              },
+              {
+                "label": "长期男上位后湿吻，随后再次下跌",
+                "likelihood": "概率很大",
+                "to": "long-bear-trap"
+              },
+              {
+                "label": "结构尚未走清",
+                "likelihood": "需要确认",
+                "to": "wet-wait"
+              }
+            ]
+          },
+          {
+            "id": "final-climax",
+            "kind": "result",
+            "title": "警惕原趋势的最后高潮",
+            "detail": "湿吻后若沿原趋势猛烈冲刺，原文把它列为制造陷阱后发生转折的一种路径，但并未说每次冲刺都必然反转。",
+            "likelihood": "概率较大",
+            "action": "不追最后一冲，等待冲刺失败以及新体位的确认。"
+          },
+          {
+            "id": "box-orientation",
+            "kind": "question",
+            "title": "反复湿吻箱体最终选择了什么方向？",
+            "detail": "长短均线反复缠绕只说明方向选择正在酝酿；突破以前没有确定的多空优势。",
+            "branches": [
+              {
+                "label": "短均线稳定在长均线上方",
+                "likelihood": "需要确认",
+                "to": "box-bull"
+              },
+              {
+                "label": "短均线稳定在长均线下方",
+                "likelihood": "需要确认",
+                "to": "box-bear"
+              },
+              {
+                "label": "仍在反复缠绕",
+                "likelihood": "方向不明",
+                "to": "box-wait"
+              }
+            ]
+          },
+          {
+            "id": "box-bull",
+            "kind": "result",
+            "title": "女上位正在形成",
+            "detail": "箱体之后短均线稳定到长均线上方，方向开始偏向多头，但仍需确认突破不是短暂穿越。",
+            "likelihood": "需要确认",
+            "action": "观察价格能否站稳箱体上沿，按新形成的女上位管理。"
+          },
+          {
+            "id": "box-bear",
+            "kind": "result",
+            "title": "男上位正在形成",
+            "detail": "箱体之后短均线稳定到长均线下方，方向开始偏向空头，但仍需确认突破不是短暂穿越。",
+            "likelihood": "需要确认",
+            "action": "观察价格能否跌破并受制于箱体下沿，按新形成的男上位控制风险。"
+          },
+          {
+            "id": "box-wait",
+            "kind": "result",
+            "title": "箱体尚未完成方向选择",
+            "detail": "反复湿吻与均线粘合仍在继续，高潮的方向尚未确定。",
+            "likelihood": "方向不明",
+            "action": "继续等待，不在箱体中央根据单次交叉下注方向。"
+          },
+          {
+            "id": "long-bear-trap",
+            "kind": "result",
+            "title": "警惕长期男上位后的空头陷阱",
+            "detail": "原文认为长期男上位之后已经发生湿吻，其后的再次下跌往往是介入良机，空头陷阱的概率很大；这一点不适用于趋势形成后的第一次湿吻。",
+            "likelihood": "概率很大",
+            "action": "观察再次下跌能否迅速收复，并等待女上位形成；不要只因“湿吻”二字提前介入。"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "011-wet-kiss-trading-range",
+      "chapterId": "011",
+      "type": "summary",
+      "title": "湿吻与 Trading Range",
+      "tags": ["湿吻", "Trading Range", "Price Action"],
+      "sourceRefs": [
+        {
+          "chapterId": "011",
+          "sectionId": "source-text",
+          "pages": [33, 33],
+          "description": "湿吻、反复缠绕与转折性箱型的原文说明"
+        }
+      ],
+      "content": {
+        "nature": ["延伸推演"],
+        "lead": "湿吻是长短均线的关系，Trading Range 是价格本身的结构，两者不能直接画等号。",
+        "paragraphs": [
+          "单次湿吻只表示短均线穿越长均线，可能是深度回调、快速反转，也可能只是一次波动，并不等于已经形成 Trading Range。",
+          "反复湿吻如果同时伴随价格高低点重叠、上下突破缺乏延续和多次突破失败，才更接近 Price Action 所说的 Trading Range。",
+          "因此应先看价格是否进入双向平衡，再把均线反复缠绕作为辅助确认；不能从一次均线交叉反推价格必然处于区间。"
+        ],
+        "items": [
+          "单次湿吻：趋势确定性下降，但结构仍需确认。",
+          "反复湿吻加价格重叠：更接近 Trading Range。",
+          "反复湿吻加上下突破失败：区间判断进一步增强。",
+          "有效脱离区间并形成新体位：再按新的趋势方向观察。"
+        ]
+      }
+    }
+  ]
+}

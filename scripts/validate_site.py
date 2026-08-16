@@ -180,6 +180,8 @@ def main():
     assert 'id="keep-awake"' in index_text
     assert 'id="resume-reading"' in index_text
     assert 'id="image-viewer"' in index_text
+    assert 'id="chapter-notes"' in index_text and 'id="all-notes"' in index_text
+    assert 'id="notes-dialog"' in index_text and 'id="notes-panel-body"' in index_text
     assert 'id="update-banner"' in index_text and 'id="update-now"' in index_text
     assert "viewport-fit=cover" in index_text
     assert "beforeinstallprompt" in app_text and "registerServiceWorker" in app_text
@@ -190,15 +192,25 @@ def main():
     assert "CHAPTER_CACHE_PREFIX" in worker_text and "chapterCacheName" in worker_text
     assert "data-reading-anchor" in app_text and "updatedAt" in app_text
     assert "openImageViewer" in app_text and "handleViewerPointerMove" in app_text
+    assert "data/notes/index.json" in app_text and "openChapterNotes" in app_text
+    assert "renderDecisionTreeContent" in app_text and "openAllNotes" in app_text
+    assert "heading.tabIndex = -1" in app_text and "返回上一步" in app_text
     assert "touch-action: none" in styles_text and "env(safe-area-inset" in styles_text
+    assert ".notes-dialog" in styles_text and "@media (max-width: 380px)" in styles_text
+    assert "overflow-wrap: anywhere" in styles_text and "overflow-x: hidden" in styles_text
     shell_match = re.search(r"const SHELL_ASSETS = \[(.*?)\];", worker_text, re.DOTALL)
     assert shell_match, "service worker shell assets are missing"
     shell_assets = shell_match.group(1)
     assert "data/audio.json" in shell_assets, "audio manifest should be shell-cached"
+    assert "data/notes/index.json" in shell_assets, "notes index should be shell-cached"
     assert "data/chapters/" not in shell_assets, "chapters must not be precached as a full book"
+    assert not re.search(r"data/notes/[0-9]{3}\.json", shell_assets), (
+        "per-chapter notes must not be shell-precached"
+    )
     assert "assets/book-images/" not in shell_assets, "book images must be cached per visited chapter"
     assert "assets/audio/" not in shell_assets, "audio files must not be precached"
     assert "isAudioRequest" in worker_text, "audio requests must bypass shell cache"
+    assert "isChapterNoteRequest" in worker_text and "cacheOptionalChapterNote" in worker_text
 
     audio_count = validate_audio_manifest(chapters)
     print(

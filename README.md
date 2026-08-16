@@ -25,10 +25,13 @@ python -m http.server 8787 --bind 127.0.0.1
 - `assets/audio/*.m4a`：108 课正文朗读音频。
 - `data/book.json`：全书 108 课目录元数据。
 - `data/audio.json`：正文朗读音频清单、时长与文件大小。
+- `data/notes/index.json`：全书笔记索引；控制哪些章节显示笔记入口。
+- `data/notes/*.json`：按章节拆分的读书笔记；新增课程笔记只需增加对应 JSON 并更新索引，无需修改应用代码。
 - `data/source_manifest.json`：111 篇内容在 PDF 中的精确页内边界。
 - `data/chapters/*.json`：按章节拆分的结构化正文数据。
 - `docs/editing-progress.md`：逐章编辑、Agent Review、修订和最终状态台账。
 - `scripts/validate_site.py`：检查目录、全书内容块、音频清单和 PWA/缓存契约。
+- `scripts/validate_notes.py`：检查笔记 ID、章节与原文引用、类型，以及决策树分支完整性。
 
 原始 PDF 只作为本地校对来源，已由 `.gitignore` 排除，不会上传到 GitHub Pages。
 
