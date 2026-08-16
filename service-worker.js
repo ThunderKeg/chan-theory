@@ -1,14 +1,15 @@
-const CACHE_VERSION = "20260816-windows-titlebar-v1";
+const CACHE_VERSION = "20260816-reader-notes-v1";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260816-windows-titlebar",
-  "./assets/app.js?v=20260816-windows-titlebar",
+  "./assets/styles.css?v=20260816-reader-notes",
+  "./assets/app.js?v=20260816-reader-notes",
   "./data/book.json",
   "./data/audio.json",
+  "./data/notes/index.json",
   "./manifest.webmanifest",
   "./assets/icons/icon-180.png",
   "./assets/icons/icon-192.png",
@@ -38,7 +39,7 @@ self.addEventListener("activate", (event) => {
 
 function chapterIdFromUrl(url) {
   const relativePath = url.pathname.slice(scopePath.length);
-  const match = relativePath.match(/^(?:data\/chapters|assets\/book-images)\/([0-9]{3})(?:\.json|\/)/);
+  const match = relativePath.match(/^(?:data\/(?:chapters|notes)|assets\/book-images)\/([0-9]{3})(?:\.json|\/)/);
   return match?.[1] || null;
 }
 
@@ -50,6 +51,11 @@ function isChapterRequest(url) {
   return url.pathname.startsWith(`${scopePath}data/chapters/`) && url.pathname.endsWith(".json");
 }
 
+function isChapterNoteRequest(url) {
+  return /^\d{3}\.json$/.test(url.pathname.slice(`${scopePath}data/notes/`.length))
+    && url.pathname.startsWith(`${scopePath}data/notes/`);
+}
+
 function isBookImageRequest(url) {
   return url.pathname.startsWith(`${scopePath}assets/book-images/`);
 }
@@ -59,7 +65,9 @@ function isAudioRequest(url) {
 }
 
 function isShellDataRequest(url) {
-  return url.pathname === `${scopePath}data/book.json` || url.pathname === `${scopePath}data/audio.json`;
+  return url.pathname === `${scopePath}data/book.json`
+    || url.pathname === `${scopePath}data/audio.json`
+    || url.pathname === `${scopePath}data/notes/index.json`;
 }
 
 function chapterImageUrls(chapter) {
@@ -106,7 +114,25 @@ async function chapterNetworkFirst(request) {
   }
 }
 
-async function cacheChapterByUrl(chapterUrl) {
+async function cacheOptionalChapterNote(noteUrl, chapterId) {
+  if (!noteUrl) return;
+  const url = new URL(noteUrl);
+  if (
+    url.origin !== self.location.origin
+    || !isChapterNoteRequest(url)
+    || chapterIdFromUrl(url) !== chapterId
+  ) return;
+  const request = new Request(url.href, { credentials: "same-origin" });
+  const cache = await caches.open(chapterCacheName(chapterId));
+  try {
+    const response = await fetch(request);
+    if (response.ok) await cache.put(request, response.clone());
+  } catch {
+    // A missing or temporarily unavailable note must never block chapter reading.
+  }
+}
+
+async function cacheChapterByUrl(chapterUrl, noteUrl = null) {
   const url = new URL(chapterUrl);
   if (url.origin !== self.location.origin || !isChapterRequest(url)) return;
   const request = new Request(url.href, { credentials: "same-origin" });
@@ -119,7 +145,12 @@ async function cacheChapterByUrl(chapterUrl) {
   } catch {
     response = await cache.match(request);
   }
-  if (response?.ok) await cacheChapterImages(response.clone(), chapterId);
+  if (response?.ok) {
+    await Promise.all([
+      cacheChapterImages(response.clone(), chapterId),
+      cacheOptionalChapterNote(noteUrl, chapterId),
+    ]);
+  }
 }
 
 async function cacheFirst(request, cacheName) {
@@ -148,7 +179,7 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate") {
     event.respondWith(navigationNetworkFirst(request));
-  } else if (isChapterRequest(url)) {
+  } else if (isChapterRequest(url) || isChapterNoteRequest(url)) {
     event.respondWith(chapterNetworkFirst(request));
   } else if (isBookImageRequest(url)) {
     event.respondWith(cacheFirst(request, chapterCacheName(chapterIdFromUrl(url))));
@@ -166,5 +197,5 @@ self.addEventListener("fetch", (event) => {
 
 self.addEventListener("message", (event) => {
   if (event.data?.type !== "CACHE_CHAPTER" || !event.data.url) return;
-  event.waitUntil(cacheChapterByUrl(event.data.url));
+  event.waitUntil(cacheChapterByUrl(event.data.url, event.data.noteUrl));
 });

@@ -31,6 +31,7 @@ jobs:
 
       - name: Validate content data
         run: |
+          python scripts/validate_notes.py
           python scripts/validate_site.py
           node --check assets/app.js
           node --check service-worker.js
