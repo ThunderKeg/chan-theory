@@ -45,8 +45,8 @@ assert.match(indexHtml, /id="notes-dialog"/);
 assert.match(indexHtml, /id="update-banner"/);
 assert.match(appSource, /beforeinstallprompt/);
 assert.match(appSource, /elements\.themeColor\.content/);
-assert.match(indexHtml, /20260816-note-tree-folding/);
-assert.match(workerSource, /20260816-note-tree-folding-v1/);
+assert.match(indexHtml, /20260816-update-prompt-fix/);
+assert.match(workerSource, /20260816-update-prompt-fix-v1/);
 assert.match(stylesSource, /display-mode:\s*window-controls-overlay/);
 assert.match(stylesSource, /env\(titlebar-area-x/);
 assert.match(stylesSource, /env\(titlebar-area-width/);
@@ -56,6 +56,13 @@ assert.match(appSource, /visibilitychange/);
 assert.match(appSource, /chan-reader-keep-awake/);
 assert.match(appSource, /controllerchange/);
 assert.match(appSource, /showUpdateBanner/);
+assert.match(appSource, /updateViaCache:\s*"none"/);
+assert.match(appSource, /registration\.update\(\)/);
+assert.match(appSource, /worker\.state === "installed"/);
+assert.match(appSource, /SERVICE_WORKER_UPDATE_INTERVAL/);
+assert.match(appSource, /window\.addEventListener\("focus", checkForServiceWorkerUpdate\)/);
+assert.match(appSource, /window\.addEventListener\("online", checkForServiceWorkerUpdate\)/);
+assert.match(appSource, /window\.addEventListener\("pageshow", checkForServiceWorkerUpdate\)/);
 assert.match(appSource, /isIosDevice/);
 assert.match(appSource, /anchor: current\?\.dataset\.readingAnchor/);
 assert.match(appSource, /handleViewerPointerMove/);
@@ -80,6 +87,84 @@ assert.match(stylesSource, /@media \(max-width: 380px\)/);
 assert.match(stylesSource, /\.notes-panel__body\s*\{[^}]*overflow-x:\s*hidden/s);
 assert.match(stylesSource, /\.note-view\s*\{[^}]*overflow-wrap:\s*anywhere/s);
 assert.match(stylesSource, /\.topbar__brand \.wordmark\s*\{\s*display:\s*none/s);
+
+function extractFunction(source, name) {
+  const start = source.indexOf(`function ${name}(`);
+  assert.notEqual(start, -1, `missing function ${name}`);
+  const bodyStart = source.indexOf("{", start);
+  let depth = 0;
+  for (let index = bodyStart; index < source.length; index += 1) {
+    if (source[index] === "{") depth += 1;
+    if (source[index] === "}") depth -= 1;
+    if (depth === 0) return source.slice(start, index + 1);
+  }
+  throw new Error(`unterminated function ${name}`);
+}
+
+const updateElements = { updateBanner: { hidden: true } };
+const updateState = {
+  serviceWorkerRegistration: null,
+  serviceWorkerUpdateCheck: null,
+};
+const updateNavigator = {
+  onLine: true,
+  serviceWorker: { controller: {} },
+};
+const updateDocument = { visibilityState: "visible" };
+const updateContext = vm.createContext({
+  Promise,
+  console: { warn() {} },
+  document: updateDocument,
+  elements: updateElements,
+  navigator: updateNavigator,
+  state: updateState,
+});
+vm.runInContext([
+  extractFunction(appSource, "watchInstallingServiceWorker"),
+  extractFunction(appSource, "checkForServiceWorkerUpdate"),
+  extractFunction(appSource, "showUpdateBanner"),
+].join("\n"), updateContext);
+
+let stateChangeListener;
+const installingWorker = {
+  state: "installing",
+  addEventListener(type, listener) {
+    if (type === "statechange") stateChangeListener = listener;
+  },
+};
+updateContext.watchInstallingServiceWorker(installingWorker);
+assert.equal(updateElements.updateBanner.hidden, true);
+installingWorker.state = "installed";
+stateChangeListener();
+assert.equal(updateElements.updateBanner.hidden, false);
+
+updateElements.updateBanner.hidden = true;
+updateNavigator.serviceWorker.controller = null;
+updateContext.watchInstallingServiceWorker({ state: "installed", addEventListener() {} });
+assert.equal(updateElements.updateBanner.hidden, true);
+updateNavigator.serviceWorker.controller = {};
+
+let finishUpdate;
+let updateCalls = 0;
+const pendingUpdate = new Promise((resolve) => {
+  finishUpdate = resolve;
+});
+updateState.serviceWorkerRegistration = {
+  update() {
+    updateCalls += 1;
+    return pendingUpdate;
+  },
+};
+const firstUpdateCheck = updateContext.checkForServiceWorkerUpdate();
+const duplicateUpdateCheck = updateContext.checkForServiceWorkerUpdate();
+assert.equal(updateCalls, 1);
+assert.equal(firstUpdateCheck, duplicateUpdateCheck);
+finishUpdate();
+await firstUpdateCheck;
+assert.equal(updateState.serviceWorkerUpdateCheck, null);
+updateDocument.visibilityState = "hidden";
+updateContext.checkForServiceWorkerUpdate();
+assert.equal(updateCalls, 1);
 
 const listeners = new Map();
 const cacheStores = new Map();

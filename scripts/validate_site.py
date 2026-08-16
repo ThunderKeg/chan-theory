@@ -188,6 +188,8 @@ def main():
     assert 'navigator.wakeLock.request("screen")' in app_text
     assert "visibilitychange" in app_text and "chan-reader-keep-awake" in app_text
     assert "controllerchange" in app_text and "showUpdateBanner" in app_text
+    assert 'updateViaCache: "none"' in app_text and "registration.update()" in app_text
+    assert 'worker.state === "installed"' in app_text and "SERVICE_WORKER_UPDATE_INTERVAL" in app_text
     assert "CACHE_CHAPTER" in app_text and "CACHE_CHAPTER" in worker_text
     assert "CHAPTER_CACHE_PREFIX" in worker_text and "chapterCacheName" in worker_text
     assert "data-reading-anchor" in app_text and "updatedAt" in app_text

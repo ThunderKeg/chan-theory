@@ -8,6 +8,7 @@ const STORAGE = {
 const SCALE_STEPS = [90, 100, 110, 120, 130];
 const VIEWER_SCALE_MIN = 1;
 const VIEWER_SCALE_MAX = 5;
+const SERVICE_WORKER_UPDATE_INTERVAL = 5 * 60 * 1000;
 
 const elements = {
   allNotes: document.querySelector("#all-notes"),
@@ -68,6 +69,8 @@ const state = {
   positionReady: false,
   positionSaveFrame: null,
   scale: normalizeScale(Number(localStorage.getItem(STORAGE.scale)) || 100),
+  serviceWorkerRegistration: null,
+  serviceWorkerUpdateCheck: null,
   toastTimer: null,
   updateReloading: false,
   wakeLock: null,
@@ -873,25 +876,64 @@ async function installApp() {
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator) || window.location.protocol === "file:") return;
-  const hadController = Boolean(navigator.serviceWorker.controller);
+  let currentController = navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (hadController && !state.updateReloading) showUpdateBanner();
+    const replacedExistingController = Boolean(currentController);
+    currentController = navigator.serviceWorker.controller;
+    if (replacedExistingController && !state.updateReloading) showUpdateBanner();
   });
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register(new URL("service-worker.js", document.baseURI), { scope: "./" })
+    navigator.serviceWorker.register(new URL("service-worker.js", document.baseURI), {
+      scope: "./",
+      updateViaCache: "none",
+    })
       .then((registration) => {
-        if (registration.waiting && hadController) showUpdateBanner();
+        state.serviceWorkerRegistration = registration;
+        if (registration.waiting && currentController) showUpdateBanner();
+        watchInstallingServiceWorker(registration.installing);
         registration.addEventListener("updatefound", () => {
-          const worker = registration.installing;
-          worker?.addEventListener("statechange", () => {
-            if (worker.state === "activated" && hadController) showUpdateBanner();
-          });
+          watchInstallingServiceWorker(registration.installing);
         });
+        window.addEventListener("focus", checkForServiceWorkerUpdate);
+        window.addEventListener("online", checkForServiceWorkerUpdate);
+        window.addEventListener("pageshow", checkForServiceWorkerUpdate);
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") checkForServiceWorkerUpdate();
+        });
+        window.setInterval(checkForServiceWorkerUpdate, SERVICE_WORKER_UPDATE_INTERVAL);
+        checkForServiceWorkerUpdate();
       })
       .catch((error) => {
         console.warn("Service Worker 注册失败", error);
       });
   });
+}
+
+function watchInstallingServiceWorker(worker) {
+  if (!worker) return;
+  const handleStateChange = () => {
+    if (worker.state === "installed" && navigator.serviceWorker.controller) showUpdateBanner();
+  };
+  worker.addEventListener("statechange", handleStateChange);
+  handleStateChange();
+}
+
+function checkForServiceWorkerUpdate() {
+  const registration = state.serviceWorkerRegistration;
+  if (
+    !registration
+    || state.serviceWorkerUpdateCheck
+    || document.visibilityState !== "visible"
+    || navigator.onLine === false
+  ) return state.serviceWorkerUpdateCheck;
+  state.serviceWorkerUpdateCheck = registration.update()
+    .catch((error) => {
+      console.warn("Service Worker 更新检查失败", error);
+    })
+    .finally(() => {
+      state.serviceWorkerUpdateCheck = null;
+    });
+  return state.serviceWorkerUpdateCheck;
 }
 
 function showUpdateBanner() {
