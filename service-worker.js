@@ -1,12 +1,12 @@
-const CACHE_VERSION = "20260815-audio-wake-lock-v1";
+const CACHE_VERSION = "20260816-windows-titlebar-v1";
 const SHELL_CACHE = `chan-reader-shell-${CACHE_VERSION}`;
 const CHAPTER_CACHE_PREFIX = `chan-reader-chapter-${CACHE_VERSION}-`;
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./assets/styles.css?v=20260815-audio-wake-lock",
-  "./assets/app.js?v=20260815-audio-wake-lock",
+  "./assets/styles.css?v=20260816-windows-titlebar",
+  "./assets/app.js?v=20260816-windows-titlebar",
   "./data/book.json",
   "./data/audio.json",
   "./manifest.webmanifest",
