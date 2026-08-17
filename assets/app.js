@@ -473,12 +473,19 @@ function renderSummaryContent(note) {
   return section;
 }
 
-function renderFullDecisionNode(nodesById, nodeId, path = [], depth = 0) {
+function renderFullDecisionNode(nodesById, nodeId, path = [], depth = 0, seen = new Set()) {
   const node = nodesById.get(nodeId);
   const wrapper = el(node.kind === "question" ? "details" : "div", `decision-tree-full__node is-${node.kind}`);
+  wrapper.dataset.decisionNode = nodeId;
+  wrapper.dataset.depth = `${depth}`;
+  seen.add(nodeId);
   const heading = el("div", "decision-tree-full__heading");
   heading.append(
-    el("span", "decision-tree-full__kind", node.kind === "question" ? "判断" : "结论"),
+    el(
+      "span",
+      "decision-tree-full__kind",
+      `${depth === 0 ? "起点" : `第 ${depth + 1} 层`} · ${node.kind === "question" ? "判断" : "结论"}`
+    ),
     el("strong", "", node.title)
   );
   if (node.likelihood) heading.append(el("span", "likelihood", `【${node.likelihood}】`));
@@ -490,28 +497,37 @@ function renderFullDecisionNode(nodesById, nodeId, path = [], depth = 0) {
   } else {
     wrapper.append(heading);
   }
-  wrapper.append(el("p", "", node.detail));
-  if (node.action) wrapper.append(el("p", "decision-action", `行动：${node.action}`));
+  const body = el("div", "decision-tree-full__body");
+  body.append(el("p", "", node.detail));
+  if (node.action) body.append(el("p", "decision-action", `行动：${node.action}`));
 
   if (node.kind === "question") {
     const branches = el("ol", "decision-tree-full__branches");
-    node.branches.forEach((branch) => {
+    node.branches.forEach((branch, branchIndex) => {
       const item = el("li", "");
       const branchLabel = el("div", "decision-tree-full__branch");
       branchLabel.append(
-        el("span", "", branch.label),
+        el("span", "decision-tree-full__branch-index", `${branchIndex + 1}`),
+        el("span", "decision-tree-full__branch-label", branch.label),
         el("span", "likelihood", `【${branch.likelihood}】`)
       );
       item.append(branchLabel);
-      if (path.includes(branch.to)) {
-        item.append(el("p", "decision-tree-full__shared", `转到“${nodesById.get(branch.to).title}”`));
+      if (path.includes(branch.to) || seen.has(branch.to)) {
+        const shared = el("p", "decision-tree-full__shared");
+        shared.append(
+          el("span", "", "汇合"),
+          el("strong", "", nodesById.get(branch.to).title),
+          el("small", "", "此节点此前已列出")
+        );
+        item.append(shared);
       } else {
-        item.append(renderFullDecisionNode(nodesById, branch.to, [...path, nodeId], depth + 1));
+        item.append(renderFullDecisionNode(nodesById, branch.to, [...path, nodeId], depth + 1, seen));
       }
       branches.append(item);
     });
-    wrapper.append(branches);
+    body.append(branches);
   }
+  wrapper.append(body);
   return wrapper;
 }
 
@@ -522,7 +538,7 @@ function renderDecisionTreeContent(note) {
   const controls = el("div", "decision-tree__controls");
   const back = el("button", "", "返回上一步");
   const restart = el("button", "", "重新开始");
-  const toggleFull = el("button", "decision-tree__full-toggle", "查看完整树");
+  const toggleFull = el("button", "decision-tree__full-toggle", "查看树状总览");
   [back, restart, toggleFull].forEach((button) => { button.type = "button"; });
   controls.append(back, restart, toggleFull);
   const stage = el("div", "decision-tree__stage");
@@ -533,42 +549,82 @@ function renderDecisionTreeContent(note) {
 
   const render = (focusHeading = false) => {
     back.hidden = fullTree;
+    restart.hidden = fullTree;
     back.disabled = history.length <= 1;
-    toggleFull.textContent = fullTree ? "返回逐步判断" : "查看完整树";
+    restart.disabled = history.length <= 1;
+    toggleFull.textContent = fullTree ? "返回逐步判断" : "查看树状总览";
+    toggleFull.setAttribute("aria-pressed", `${fullTree}`);
     stage.replaceChildren();
 
     if (fullTree) {
       const full = el("div", "decision-tree-full");
       full.setAttribute("aria-label", "完整决策树");
+      full.append(el("p", "decision-tree-full__hint", "判断节点可以展开或收起；每条分支沿连接线进入下一层。"));
       const foldControls = el("div", "decision-tree-full__controls");
-      const expandAll = el("button", "", "全部展开");
-      const collapseAll = el("button", "", "全部折叠");
+      const expandAll = el("button", "", "展开全部");
+      const collapseAll = el("button", "", "收起到一级");
       [expandAll, collapseAll].forEach((button) => { button.type = "button"; });
+      const root = renderFullDecisionNode(nodesById, content.rootId);
       expandAll.addEventListener("click", () => {
         full.querySelectorAll("details").forEach((details) => { details.open = true; });
       });
       collapseAll.addEventListener("click", () => {
         full.querySelectorAll("details").forEach((details) => { details.open = false; });
+        root.open = true;
       });
       foldControls.append(expandAll, collapseAll);
-      full.append(foldControls, renderFullDecisionNode(nodesById, content.rootId));
+      full.append(foldControls, root);
       stage.append(full);
       return;
     }
 
     const node = nodesById.get(history.at(-1));
+    const path = el("nav", "decision-path");
+    path.setAttribute("aria-label", "当前判断路径");
+    path.append(el("span", "decision-path__label", "当前判断路径"));
+    const pathList = el("ol", "decision-path__list");
+    history.forEach((pathNodeId, index) => {
+      const pathNode = nodesById.get(pathNodeId);
+      const pathItem = el("li", index === history.length - 1 ? "is-current" : "");
+      const pathButton = el("button", "decision-path__step");
+      pathButton.type = "button";
+      const pathCopy = el("span", "decision-path__copy");
+      const previousNode = index > 0 ? nodesById.get(history[index - 1]) : null;
+      const incomingBranch = previousNode?.branches.find((branch) => branch.to === pathNodeId);
+      pathCopy.append(
+        el("small", "", index === 0 ? "起点" : `选择：${incomingBranch?.label || "继续判断"}`),
+        el("strong", "", pathNode.title)
+      );
+      pathButton.append(el("span", "decision-path__number", `${index + 1}`), pathCopy);
+      if (index === history.length - 1) {
+        pathButton.disabled = true;
+        pathButton.setAttribute("aria-current", "step");
+      } else {
+        pathButton.title = `返回第 ${index + 1} 步`;
+        pathButton.addEventListener("click", () => {
+          history = history.slice(0, index + 1);
+          render(true);
+        });
+      }
+      pathItem.append(pathButton);
+      pathList.append(pathItem);
+    });
+    path.append(pathList);
+    stage.append(path);
+
     const step = el("article", `decision-step is-${node.kind}`);
-    step.append(el("span", "decision-step__counter", `第 ${history.length} 步`));
+    step.append(el("span", "decision-step__counter", node.kind === "question" ? "当前判断" : "判断结果"));
     const heading = el("h3", "", node.title);
     heading.tabIndex = -1;
     step.append(heading, el("p", "decision-step__detail", node.detail));
 
     if (node.kind === "question") {
       const choices = el("div", "decision-choices");
-      node.branches.forEach((branch) => {
+      node.branches.forEach((branch, branchIndex) => {
         const button = el("button", "decision-choice");
         button.type = "button";
         button.append(
+          el("span", "decision-choice__index", `${branchIndex + 1}`),
           el("span", "decision-choice__label", branch.label),
           el("span", "likelihood", `【${branch.likelihood}】`)
         );

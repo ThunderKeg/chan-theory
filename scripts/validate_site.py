@@ -196,9 +196,10 @@ def main():
     assert "openImageViewer" in app_text and "handleViewerPointerMove" in app_text
     assert "data/notes/index.json" in app_text and "openChapterNotes" in app_text
     assert "renderDecisionTreeContent" in app_text and "openAllNotes" in app_text
-    assert "heading.tabIndex = -1" in app_text and "返回上一步" in app_text
+    assert "heading.tabIndex = -1" in app_text and "当前判断路径" in app_text
+    assert "查看树状总览" in app_text and "收起到一级" in app_text
     assert 'node.kind === "question" ? "details" : "div"' in app_text
-    assert "全部展开" in app_text and "全部折叠" in app_text
+    assert "seen.has(branch.to)" in app_text and ".decision-path__list" in styles_text
     assert "touch-action: none" in styles_text and "env(safe-area-inset" in styles_text
     assert ".notes-dialog" in styles_text and "@media (max-width: 380px)" in styles_text
     assert ".decision-tree-full__node.is-question[open]" in styles_text
