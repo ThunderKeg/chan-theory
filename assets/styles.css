@@ -1513,6 +1513,120 @@ summary:focus-visible,
   min-width: 0;
 }
 
+.decision-path {
+  margin-bottom: 16px;
+  padding: 14px 16px 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+}
+
+.decision-path__label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--ink-faint);
+  font-size: 0.64em;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.decision-path__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.decision-path__list > li {
+  position: relative;
+  min-width: 0;
+}
+
+.decision-path__list > li:not(:last-child)::after {
+  position: absolute;
+  top: 32px;
+  bottom: -4px;
+  left: 13px;
+  width: 2px;
+  background: color-mix(in srgb, var(--accent) 32%, var(--line));
+  content: "";
+}
+
+.decision-path__step {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 7px 8px 8px 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-align: left;
+}
+
+.decision-path__step:hover {
+  background: var(--accent-soft);
+}
+
+.decision-path__step:disabled {
+  color: var(--ink);
+  cursor: default;
+  opacity: 1;
+}
+
+.decision-path__step:disabled:hover {
+  background: transparent;
+}
+
+.decision-path__number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 999px;
+  background: var(--surface-solid);
+  color: var(--accent-deep);
+  font-size: 0.68em;
+  font-weight: 800;
+}
+
+.decision-path__list > .is-current .decision-path__number {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.decision-path__copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.decision-path__copy small {
+  overflow: hidden;
+  color: var(--ink-faint);
+  font-size: 0.62em;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.decision-path__copy strong {
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: 0.78em;
+  font-weight: 600;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .decision-step {
   padding: clamp(20px, 4vw, 30px);
   border: 1px solid var(--line);
@@ -1550,11 +1664,11 @@ summary:focus-visible,
 }
 
 .decision-choice {
-  display: flex;
+  display: grid;
   width: 100%;
   min-width: 0;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 13px 14px;
   border: 1px solid var(--line);
@@ -1575,6 +1689,19 @@ summary:focus-visible,
   font-family: var(--serif);
   font-size: 0.9em;
   line-height: 1.55;
+}
+
+.decision-choice__index,
+.decision-tree-full__branch-index {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 0.68em;
+  font-weight: 800;
 }
 
 .likelihood {
@@ -1603,6 +1730,13 @@ summary:focus-visible,
   padding: 4px 0;
 }
 
+.decision-tree-full__hint {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 0.72em;
+  line-height: 1.6;
+}
+
 .decision-tree-full__controls {
   display: flex;
   flex-wrap: wrap;
@@ -1614,11 +1748,21 @@ summary:focus-visible,
 
 .decision-tree-full__node {
   min-width: 0;
-  padding: 14px 0 4px;
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 76%, transparent);
+  box-shadow: 0 7px 18px rgba(53, 50, 38, 0.035);
+  overflow: hidden;
+}
+
+.decision-tree-full__node.is-result {
+  border-color: color-mix(in srgb, var(--cinnabar) 28%, var(--line));
+  background: color-mix(in srgb, var(--cinnabar-soft) 44%, var(--surface));
 }
 
 .decision-tree-full__node.is-question > summary {
-  border-radius: 8px;
+  padding: 12px 13px;
   cursor: pointer;
   list-style: none;
 }
@@ -1628,7 +1772,7 @@ summary:focus-visible,
 }
 
 .decision-tree-full__node.is-question > summary:hover {
-  background: color-mix(in srgb, var(--accent-soft) 44%, transparent);
+  background: color-mix(in srgb, var(--accent-soft) 58%, transparent);
 }
 
 .decision-tree-full__node.is-question > summary .decision-tree-full__heading::before {
@@ -1653,10 +1797,22 @@ summary:focus-visible,
 
 .decision-tree-full__heading,
 .decision-tree-full__branch {
-  display: flex;
+  display: grid;
   min-width: 0;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
+}
+
+.decision-tree-full__heading {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.decision-tree-full__node.is-question > summary .decision-tree-full__heading {
+  grid-template-columns: 22px auto minmax(0, 1fr) auto;
+}
+
+.decision-tree-full__node.is-result > .decision-tree-full__heading {
+  padding: 12px 13px 0;
 }
 
 .decision-tree-full__heading strong {
@@ -1674,7 +1830,16 @@ summary:focus-visible,
   letter-spacing: 0.08em;
 }
 
-.decision-tree-full__node > p {
+.decision-tree-full__body {
+  min-width: 0;
+  padding: 0 13px 13px 43px;
+}
+
+.decision-tree-full__node.is-result > .decision-tree-full__body {
+  padding-left: 13px;
+}
+
+.decision-tree-full__body > p {
   margin: 7px 0 0;
   color: var(--ink-soft);
   font-size: 0.76em;
@@ -1683,19 +1848,31 @@ summary:focus-visible,
 
 .decision-tree-full__branches {
   margin: 12px 0 0;
-  padding: 0 0 0 clamp(10px, 3vw, 20px);
-  border-left: 1px solid var(--line);
+  padding: 0 0 0 clamp(12px, 3vw, 22px);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 32%, var(--line));
   list-style: none;
 }
 
 .decision-tree-full__branches > li {
+  position: relative;
   min-width: 0;
-  margin: 12px 0;
+  margin: 14px 0;
+}
+
+.decision-tree-full__branches > li::before {
+  position: absolute;
+  top: 18px;
+  left: calc(-1 * clamp(12px, 3vw, 22px));
+  width: clamp(12px, 3vw, 22px);
+  height: 2px;
+  background: color-mix(in srgb, var(--accent) 32%, var(--line));
+  content: "";
 }
 
 .decision-tree-full__branch {
-  justify-content: space-between;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
   padding: 9px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
   border-radius: 8px;
   background: var(--accent-soft);
   color: var(--accent-deep);
@@ -1703,10 +1880,44 @@ summary:focus-visible,
   line-height: 1.55;
 }
 
+.decision-tree-full__branch-index {
+  background: var(--surface-solid);
+}
+
+.decision-tree-full__branch-label {
+  min-width: 0;
+}
+
 .decision-tree-full__shared {
-  margin: 7px 0 0 10px;
-  color: var(--ink-faint);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 8px;
+  margin: 9px 0 0 10px;
+  padding: 9px 10px;
+  border-left: 2px dashed var(--line);
+  color: var(--ink-soft);
   font-size: 0.7em;
+}
+
+.decision-tree-full__shared > span {
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  font-size: 0.84em;
+  font-weight: 750;
+}
+
+.decision-tree-full__shared strong {
+  min-width: 0;
+  font-family: var(--serif);
+  font-weight: 650;
+}
+
+.decision-tree-full__shared small {
+  color: var(--ink-faint);
 }
 
 .note-summary p,
@@ -2259,15 +2470,46 @@ summary:focus-visible,
     margin-left: 0;
   }
 
-  .decision-choice,
-  .decision-tree-full__branch {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 5px;
+  .decision-choice .likelihood,
+  .decision-tree-full__branch .likelihood {
+    grid-column: 2;
   }
 
   .decision-tree-full__branches {
-    padding-left: 10px;
+    padding-left: 8px;
+  }
+
+  .decision-tree-full__branches > li::before {
+    left: -8px;
+    width: 8px;
+  }
+
+  .decision-tree-full__body {
+    padding-right: 9px;
+    padding-left: 26px;
+  }
+
+  .decision-tree-full__node.is-question > summary .decision-tree-full__heading {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+
+  .decision-tree-full__node.is-question > summary .decision-tree-full__heading::before {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+
+  .decision-tree-full__node.is-question > summary .decision-tree-full__kind,
+  .decision-tree-full__node.is-question > summary .decision-tree-full__heading > strong,
+  .decision-tree-full__node.is-question > summary .decision-tree-full__heading > .likelihood {
+    grid-column: 2;
+  }
+
+  .decision-tree-full__node.is-result > .decision-tree-full__heading {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .decision-tree-full__node.is-result > .decision-tree-full__heading > * {
+    grid-column: 1;
   }
 }
 

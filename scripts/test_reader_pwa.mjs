@@ -45,8 +45,8 @@ assert.match(indexHtml, /id="notes-dialog"/);
 assert.match(indexHtml, /id="update-banner"/);
 assert.match(appSource, /beforeinstallprompt/);
 assert.match(appSource, /elements\.themeColor\.content/);
-assert.match(indexHtml, /20260816-update-prompt-fix/);
-assert.match(workerSource, /20260816-update-prompt-fix-v1/);
+assert.match(indexHtml, /20260817-decision-tree-hierarchy/);
+assert.match(workerSource, /20260817-decision-tree-hierarchy-v1/);
 assert.match(stylesSource, /display-mode:\s*window-controls-overlay/);
 assert.match(stylesSource, /env\(titlebar-area-x/);
 assert.match(stylesSource, /env\(titlebar-area-width/);
@@ -76,12 +76,15 @@ assert.match(appSource, /openAllNotes/);
 assert.match(appSource, /heading\.tabIndex = -1/);
 assert.match(appSource, /返回上一步/);
 assert.match(appSource, /重新开始/);
-assert.match(appSource, /查看完整树/);
+assert.match(appSource, /当前判断路径/);
+assert.match(appSource, /查看树状总览/);
 assert.match(appSource, /el\(node\.kind === "question" \? "details" : "div"/);
-assert.match(appSource, /全部展开/);
-assert.match(appSource, /全部折叠/);
+assert.match(appSource, /展开全部/);
+assert.match(appSource, /收起到一级/);
 assert.match(appSource, /querySelectorAll\("details"\)/);
+assert.match(appSource, /seen\.has\(branch\.to\)/);
 assert.match(stylesSource, /\.notes-dialog/);
+assert.match(stylesSource, /\.decision-path__list/);
 assert.match(stylesSource, /\.decision-tree-full__node\.is-question\[open\]/);
 assert.match(stylesSource, /@media \(max-width: 380px\)/);
 assert.match(stylesSource, /\.notes-panel__body\s*\{[^}]*overflow-x:\s*hidden/s);
@@ -100,6 +103,104 @@ function extractFunction(source, name) {
   }
   throw new Error(`unterminated function ${name}`);
 }
+
+class TestElement {
+  constructor(tagName) {
+    this.tagName = tagName.toUpperCase();
+    this.children = [];
+    this.attributes = new Map();
+    this.dataset = {};
+    this.listeners = new Map();
+    this.className = "";
+    this.textContent = "";
+    this.disabled = false;
+    this.hidden = false;
+    this.open = false;
+  }
+
+  append(...children) {
+    children.forEach((child) => {
+      child.parentElement = this;
+      this.children.push(child);
+    });
+  }
+
+  replaceChildren(...children) {
+    this.children = [];
+    this.append(...children);
+  }
+
+  setAttribute(name, value) {
+    this.attributes.set(name, `${value}`);
+  }
+
+  addEventListener(type, listener) {
+    if (!this.listeners.has(type)) this.listeners.set(type, []);
+    this.listeners.get(type).push(listener);
+  }
+
+  click() {
+    if (this.disabled) return;
+    (this.listeners.get("click") || []).forEach((listener) => listener());
+  }
+
+  focus() {
+    this.focused = true;
+  }
+
+  querySelectorAll(selector) {
+    const matches = [];
+    const matchesSelector = (element) => {
+      if (selector.startsWith(".")) return element.className.split(/\s+/).includes(selector.slice(1));
+      return element.tagName.toLowerCase() === selector.toLowerCase();
+    };
+    const visit = (element) => {
+      element.children.forEach((child) => {
+        if (matchesSelector(child)) matches.push(child);
+        visit(child);
+      });
+    };
+    visit(this);
+    return matches;
+  }
+}
+
+const noteBundle = JSON.parse(noteBundleSource);
+const decisionNote = noteBundle.notes.find((note) => note.type === "decision-tree");
+const decisionContext = vm.createContext({
+  Map,
+  Set,
+  note: decisionNote,
+  document: { createElement: (tagName) => new TestElement(tagName) },
+  window: { requestAnimationFrame: (callback) => callback() },
+});
+vm.runInContext([
+  extractFunction(appSource, "el"),
+  extractFunction(appSource, "renderFullDecisionNode"),
+  extractFunction(appSource, "renderDecisionTreeContent"),
+].join("\n"), decisionContext);
+
+const renderedDecisionTree = vm.runInContext("renderDecisionTreeContent(note)", decisionContext);
+const decisionControls = renderedDecisionTree.children[0];
+const decisionStage = renderedDecisionTree.children[1];
+assert.equal(decisionStage.querySelectorAll(".decision-path__step").length, 1);
+assert.equal(decisionStage.querySelectorAll(".decision-choice").length, 2);
+decisionStage.querySelectorAll(".decision-choice")[0].click();
+assert.equal(decisionStage.querySelectorAll(".decision-path__step").length, 2);
+assert.equal(decisionStage.querySelectorAll(".decision-choice").length, 3);
+decisionStage.querySelectorAll(".decision-path__step")[0].click();
+assert.equal(decisionStage.querySelectorAll(".decision-path__step").length, 1);
+
+decisionControls.children[2].click();
+assert.equal(decisionControls.children[0].hidden, true);
+assert.equal(decisionControls.children[1].hidden, true);
+assert.equal(decisionStage.querySelectorAll(".decision-tree-full__node").length, decisionNote.content.nodes.length);
+assert.equal(decisionStage.querySelectorAll(".decision-tree-full__shared").length, 3);
+const decisionDetails = decisionStage.querySelectorAll("details");
+decisionStage.querySelectorAll(".decision-tree-full__controls")[0].children[0].click();
+assert.ok(decisionDetails.every((details) => details.open));
+decisionStage.querySelectorAll(".decision-tree-full__controls")[0].children[1].click();
+assert.equal(decisionDetails.filter((details) => details.open).length, 1);
 
 const updateElements = { updateBanner: { hidden: true } };
 const updateState = {
@@ -321,7 +422,7 @@ assert.doesNotMatch(shellAssetsMatch[1], /assets\/audio/);
 assert.match(workerSource, /isAudioRequest/);
 
 console.log(
-  `OK: install manifest, precise progress contract, image zoom contract, ` +
+  `OK: install manifest, decision-tree hierarchy, precise progress contract, image zoom contract, ` +
   `per-chapter cache (${1 + expectedImages.length} entries), optional note cache ` +
   `(${2 + noteImages.length} entries) and offline fallback`,
 );
